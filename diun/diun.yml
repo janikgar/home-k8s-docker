@@ -1,0 +1,6 @@
+notif:
+  ntfy:
+    endpoint: https://ntfy.home.lan
+    topic: diun
+    priority: 3
+    timeout: 5s

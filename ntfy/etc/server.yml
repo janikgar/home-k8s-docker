@@ -1,0 +1,20 @@
+listen-http: "0.0.0.0:30005"
+behind-proxy: true
+keepalive-interval: "45s"
+base-url: "https://ntfy.home.lan"
+upstream-base-url: "https://ntfy.sh"
+
+cache-file: /var/cache/ntfy/cache.db
+cache-startup-queries: |
+  pragma journal_mode = WAL;
+  pragma synchronous = normal;
+  pragma temp_store = memory;
+  pragma busy_timeout = 15000;
+  vacuum;
+cache-duration: "12h"
+
+attachment-cache-dir: /var/cache/ntfy/attachments
+
+smtp-server-listen: ":30025"
+smtp-server-domain: ntfymail.home.lan
+smtp-server-addr-prefix: "ntfy-"

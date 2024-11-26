@@ -1,0 +1,46 @@
+services:
+  fail2banInit:
+    image: busybox:latest
+    container_name: init
+    cap_add:
+      - NET_RAW
+    volumes:
+      - /var/run:/var/run
+    command:
+      - sh
+      - -c
+      - mkdir -p /var/run/fail2ban
+  fail2ban:
+    image: lscr.io/linuxserver/fail2ban:latest
+    container_name: fail2ban
+    depends_on:
+      - fail2banInit
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    network_mode: host
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York
+    volumes:
+      - /volume1/docker/fail2ban/config:/config
+      - /var/run/fail2ban:/var/run/fail2ban
+      - /var/log:/var/log:ro
+      - /var/log/nginx:/remotelogs/nginx:ro
+      - /var/packages/homeassistant/var:/remotelogs/homeassistant:ro
+    restart: always
+    labels:
+      - "diun.enable=true"
+  fail2ban_exporter:
+    image: registry.gitlab.com/hectorjsmith/fail2ban-prometheus-exporter:latest
+    container_name: fail2ban_exporter
+    depends_on:
+      - fail2ban
+    network_mode: bridge
+    volumes:
+      - /var/run/fail2ban:/var/run/fail2ban:ro
+    ports:
+      - '9191:9191'
+    labels:
+      - "diun.enable=true"

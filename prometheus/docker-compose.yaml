@@ -1,0 +1,159 @@
+services:
+  prometheus:
+    image: quay.io/prometheus/prometheus
+    container_name: prometheus
+    ports:
+      - "30001:9090"
+    command:
+      - --config.file=/prom/prometheus.yaml
+      - --web.enable-lifecycle
+      - --storage.tsdb.min-block-duration=2h
+      - --storage.tsdb.max-block-duration=2h
+      - --enable-feature=promql-at-modifier
+    volumes:
+      - /volume1/docker/prometheus/prometheus.yaml:/prom/prometheus.yaml
+      - /volume1/docker/prometheus/prometheus_data:/prometheus/data
+      - /volume1/docker/prometheus/mixins:/prom/mixins
+      - /volume1/docker/prometheus/hass_token.txt:/var/run/secrets/hass_token.txt:ro
+      - /volume1/docker/prometheus/minio_token.txt:/var/run/secrets/minio_token.txt:ro
+    restart: always
+    labels:
+      - "diun.enable=true"
+    restart: always
+    deploy:
+      restart_policy:
+        condition: any
+      resources:
+        limits:
+          memory: 384M
+  alertmanager:
+    image: quay.io/prometheus/alertmanager
+    container_name: alertmanager
+    ports:
+      - "30093:9093"
+    command:
+      - --config.file=/etc/alertmanager/alertmanager.yaml
+    volumes:
+      - /etc/ssl/certs:/etc/ssl/certs:ro
+      - /volume1/docker/prometheus/alertmanager.yaml:/etc/alertmanager/alertmanager.yaml
+      - /volume1/docker/prometheus/mixins:/etc/alertmanager/mixins
+      - /volume1/docker/prometheus/email_token.txt:/var/secrets/email_token.txt:ro
+      - /volume1/docker/prometheus/discord_webhook.txt:/var/secrets/discord_webhook.txt:ro
+    restart: always
+    labels:
+      - "diun.enable=true"
+    restart: always
+    deploy:
+      restart_policy:
+        condition: any
+  node_exporter:
+    image: quay.io/prometheus/node-exporter
+    container_name: node_exporter
+    command: --path.rootfs=/host
+    ports:
+      - "9100:9100"
+    volumes:
+      - "/:/host:ro"
+      - "/sys:/sys:ro"
+    restart: always
+    labels:
+      - "diun.enable=true"
+    restart: always
+    deploy:
+      restart_policy:
+        condition: any
+  blackbox_exporter:
+    container_name: blackbox_exporter
+    image: quay.io/prometheus/blackbox-exporter
+    command: --config.file=/config/blackbox.yaml
+    ports:
+      - "9115:9115"
+    volumes:
+      - /volume1/docker/prometheus/blackbox.yaml:/config/blackbox.yaml
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    restart: always
+    labels:
+      - "diun.enable=true"
+  snmp_exporter:
+    container_name: snmp_exporter
+    image: quay.io/prometheus/snmp-exporter
+    volumes:
+      - /volume1/docker/prometheus/snmp.yml:/etc/snmp_exporter/snmp.yml
+    ports:
+      - "9116:9116"
+    restart: always
+    labels:
+      - "diun.enable=true"
+  mysqld_exporter:
+    container_name: mysqld_exporter
+    image: quay.io/prometheus/mysqld-exporter
+    command:
+      - --config.my-cnf=/etc/mysqld_exporter/config.my-cnf
+      - --mysqld.address=192.168.1.28:3307
+    volumes:
+      - /volume1/docker/prometheus/config.my-cnf:/etc/mysqld_exporter/config.my-cnf
+    ports:
+      - "9104:9104"
+    restart: always
+    labels:
+      - "diun.enable=true"
+  grafana:
+    container_name: grafana
+    image: grafana/grafana
+    ports:
+      - "30000:3000"
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    volumes:
+      - /volume1/docker/prometheus/grafana.ini:/etc/grafana/grafana.ini
+      - /volume1/docker/prometheus/ldap.toml
+      - /volume1/docker/prometheus/grafana_data:/var/lib/grafana
+      - /run/mysqld/mysqld.sock:/run/mysqld/mysqld.sock
+      - /etc/ssl/certs/ca-certificates.crt:/etc/ssl/cert.pem:ro
+    env_file: .grafana.env
+    environment: {}
+      #GF_RENDERING_SERVER_URL: http://host.docker.internal:30081/render
+      #GF_RENDERING_CALLBACK_URL: http://host.docker.internal:30000/
+      #GF_LOG_FILTERS: rendering:debug
+    restart: always
+    labels: 
+      - "diun.enable=true"
+    deploy:
+      restart_policy:
+        condition: any
+      resources:
+        limits:
+          memory: 256M
+  grafana_renderer:
+    container_name: grafana_renderer
+    image: grafana/grafana-image-renderer
+    ports:
+      - 30081:8081
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    restart: always
+    labels: 
+      - "diun.enable=true"
+    deploy:
+      restart_policy:
+        condition: any
+  tempo:
+    container_name: tempo
+    image: grafana/tempo:latest
+    env_file: .tempo.env
+    command: 
+      - -config.file=/etc/tempo.yaml
+      - -config.expand-env=true
+    volumes:
+      - ./tempo-s3.yaml:/etc/tempo.yaml
+      - ./tempo-data:/tmp/tempo
+    ports:
+      - "14268"      # jaeger
+      - "32001:3200"  # tempo
+      - "32317:4317"  # otlp grpc
+      - "32318:4318"  # otlp http
+    restart: on-failure
+    labels:
+      - "diun.enable=true"

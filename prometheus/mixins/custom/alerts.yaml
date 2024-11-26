@@ -1,0 +1,10 @@
+groups:
+  - name: adguard_disabled
+    rules:
+      - alert: AdGuardDisabled
+        expr: hass_switch_state{entity="switch.adguard_protection"} < 1
+        for: 60m
+        labels:
+          severity: critical
+        annotations:
+          summary: AdGuard Disabled for > 1 hr

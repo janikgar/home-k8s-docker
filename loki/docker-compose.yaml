@@ -1,0 +1,48 @@
+version: "3.8"
+
+services:
+
+  # Since the Loki containers are running as user 10001 and the mounted data volume is owned by root,
+  # Loki would not have permissions to create the directories.
+  # Therefore the init container changes permissions of the mounted directory.
+  promtail:
+    image: grafana/promtail:3.2.0
+    container_name: promtail
+    volumes:
+      - /var/log:/var/log
+      - /volume1/docker/fail2ban/config/log/fail2ban:/var/log/fail2ban
+      - /volume1/@appdata/homeassistant:/var/log/homeassistant
+      - /volume1/@appdata/Docker/docker/containers:/var/docker
+      - ./config:/etc/promtail/
+    ports:
+      - "9080:9080"
+      - "1514:1514"
+    command: -config.file=/etc/promtail/promtail-gateway.yaml
+    networks:
+      - loki
+    labels:
+      - "diun.enable=true"
+    restart: always
+
+  loki:
+    image: grafana/loki:3.2.0
+    container_name: loki
+    volumes:
+      - ./config:/etc/loki/
+      - ./loki:/loki
+    ports:
+      - "30002:3100"
+      - "30003:7946"
+    command: "-config.file=/etc/loki/loki-config.yaml -target=all"
+    networks:
+      - loki
+    restart: on-failure
+    labels:
+      - "diun.enable=true"
+    deploy:
+      resources:
+        limits:
+          memory: 768M
+
+networks:
+  loki:

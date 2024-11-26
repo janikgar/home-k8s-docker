@@ -1,0 +1,191 @@
+global:
+  scrape_interval:     15s
+  evaluation_interval: 15s
+  external_labels:
+    prometheus: prom_main
+
+rule_files:
+  - /prom/mixins/mysql/alerts.yaml
+  - /prom/mixins/mysql/rules.yaml
+  - /prom/mixins/node_exporter/node_alerts.yaml
+  - /prom/mixins/node_exporter/node_rules.yaml
+  - /prom/mixins/custom/alerts.yaml
+  - /prom/mixins/loki/alerts.yaml
+  - /prom/mixins/loki/rules.yaml
+
+alerting:
+  alertmanagers:
+    - scheme: http
+      static_configs:
+        - targets:
+          - "alertmanager:9093"
+
+scrape_configs:
+  - job_name: router
+    scrape_interval: 15s
+    static_configs:
+      - targets:
+        - '192.168.1.1:9100'
+    metric_relabel_configs: &commonRelabels
+      - source_labels: [__name__]
+        regex: 'node_(nfs_requests_total|scrape_collector.*)'
+        action: drop
+      - source_labels: [fstype]
+        regex: '(tmpfs|nfs|cifs|vfat)'
+        action: drop
+      - source_labels: [mountpoint]
+        regex: '.*pod.*'
+        action: drop
+      - source_labels: [handler]
+        regex: '^\/$|\/\-\/(ready|reload)|\/(graph|metrics|alerts|favicon.ico)'
+        action: drop
+  - job_name: syno_node
+    static_configs:
+      - targets:
+        - 'node_exporter:9100'
+    metric_relabel_configs: *commonRelabels
+  - job_name: prometheus
+    static_configs:
+      - targets:
+        - 'prometheus:9090'
+    metric_relabel_configs: *commonRelabels
+  - job_name: k8s_node
+    static_configs:
+      - targets:
+        - '192.168.1.101:9100'
+        - '192.168.1.102:9100'
+        - '192.168.1.103:9100'
+        - '192.168.1.104:9100'
+    relabel_configs:
+      - source_labels: [fstype]
+        regex: "nfs|tmpfs"
+        action: drop
+      - source_labels: [exported_mountpoint]
+        regex: ".*pods.*"
+        action: drop
+    metric_relabel_configs: *commonRelabels
+  - job_name: hass
+    scrape_interval: 60s
+    metrics_path: /api/prometheus
+    authorization:
+      credentials_file: /var/run/secrets/hass_token.txt
+    scheme: http
+    static_configs:
+      - targets: ['192.168.1.28:8123']
+  - job_name: minio-job
+    authorization:
+      credentials_file: /var/run/secrets/minio_token.txt
+    metrics_path: /minio/v2/metrics/cluster
+    scheme: http
+    static_configs:
+    - targets: ['192.168.1.28:9000']
+  - job_name: 'local_dns'
+    metrics_path: /probe
+    params:
+      module: [local_dns]
+    static_configs:
+      - targets:
+        - 192.168.1.1
+        - 192.168.1.3
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: blackbox_exporter:9115
+  - job_name: 'remote_dns'
+    metrics_path: /probe
+    params:
+      module: [remote_dns]
+    static_configs:
+      - targets:
+        - 192.168.1.1
+        - 192.168.1.3
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: blackbox_exporter:9115
+  - job_name: 'snmp'
+    metrics_path: /snmp
+    params:
+      module:
+       - if_mib
+    static_configs:
+      - targets:
+        - 192.168.1.1
+        - 192.168.1.3
+        - 192.168.1.28
+        - 192.168.1.101
+        - 192.168.1.102
+        - 192.168.1.103
+        - 192.168.1.104
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: snmp_exporter:9116
+      - regex: "lxc.*"
+        action: labeldrop
+  - job_name: 'syno'
+    metrics_path: /snmp
+    params:
+      module:
+       - synology
+    static_configs:
+      - targets:
+        - 192.168.1.1
+        - 192.168.1.28
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: snmp_exporter:9116
+      - regex: diskSMARTInfoIndex
+        action: labeldrop
+      - source_labels: [ifName]
+        regex: "docker.*"
+        action: drop
+  - job_name: 'http_ping'
+    metrics_path: /probe
+    params:
+      module: [http_2xx]
+    static_configs:
+      - targets:
+        - www.google.com
+        - www.apple.com
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: blackbox_exporter:9115
+  - job_name: 'fail2ban'
+    static_configs:
+      - targets:
+        - '192.168.1.28:9191'
+  - job_name: mysql
+    static_configs:
+      - targets:
+        - 192.168.1.28:3307
+    relabel_configs:
+        - source_labels: [__address__]
+          target_label: __param_target
+        - source_labels: [__param_target]
+          target_label: instance
+        - target_label: __address__
+          replacement: mysqld_exporter:9104
+  - job_name: 'tempo'
+    static_configs:
+      - targets: [ '192.168.1.28:32001' ]
+  - job_name: loki
+    static_configs:
+      - targets: [ '192.168.1.28:30002' ]

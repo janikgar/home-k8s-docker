@@ -1,0 +1,10 @@
+services:
+  pancors:
+    image: michaljanocko/pancors:latest
+    container_name: pancors
+    ports:
+      - "18080:8080"
+    network_mode: bridge
+    labels:
+      - "diun.enable=true"
+    restart: always
