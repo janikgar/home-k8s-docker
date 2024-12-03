@@ -1,0 +1,292 @@
+- id: '1606617514086'
+  name: Living Room Bright
+  entities:
+    light.left_ent_center:
+      brightness: 255
+      friendly_name: Left Ent Center
+      supported_features: 41
+      state: 'on'
+    light.right_ent_center:
+      brightness: 255
+      friendly_name: Right Ent Center
+      supported_features: 41
+      state: 'on'
+    light.light_strip:
+      min_mireds: 153
+      max_mireds: 500
+      effect_list:
+      - colorloop
+      - random
+      brightness: 255
+      color_temp: 316
+      effect: none
+      friendly_name: Light Strip
+      supported_features: 63
+      state: 'on'
+  icon: mdi:brightness-5
+- id: '1606617991393'
+  name: Living Room Medium
+  entities:
+    light.left_ent_center:
+      brightness: 166
+      friendly_name: Left Ent Center
+      supported_features: 41
+      state: 'on'
+    light.right_ent_center:
+      brightness: 161
+      friendly_name: Right Ent Center
+      supported_features: 41
+      state: 'on'
+    light.light_strip:
+      min_mireds: 153
+      max_mireds: 500
+      effect_list:
+      - colorloop
+      - random
+      brightness: 171
+      hs_color:
+      - 38.095
+      - 49.412
+      rgb_color:
+      - 255
+      - 208
+      - 128
+      xy_color:
+      - 0.45
+      - 0.404
+      effect: none
+      friendly_name: Light Strip
+      supported_features: 63
+      state: 'on'
+  icon: mdi:brightness-6
+- id: '1606618092546'
+  name: Living Room Movie
+  entities:
+    light.light_strip:
+      min_mireds: 153
+      max_mireds: 500
+      effect_list:
+      - colorloop
+      - random
+      brightness: 84
+      color_temp: 316
+      effect: none
+      friendly_name: Light Strip
+      supported_features: 63
+      state: 'on'
+    light.right_ent_center:
+      brightness: 71
+      friendly_name: Right Ent Center
+      supported_features: 41
+      state: 'on'
+    light.left_ent_center:
+      brightness: 76
+      friendly_name: Left Ent Center
+      supported_features: 41
+      state: 'on'
+  icon: mdi:brightness-4
+- id: '1607246268954'
+  name: Night Bedstand
+  entities:
+    light.jng_nightstand:
+      min_mireds: 153
+      max_mireds: 500
+      supported_color_modes:
+      - color_temp
+      - xy
+      color_mode: xy
+      brightness: 1
+      hs_color:
+      - 33.767
+      - 84.314
+      rgb_color:
+      - 255
+      - 161
+      - 40
+      xy_color:
+      - 0.561
+      - 0.4042
+      mode: normal
+      dynamics: none
+      friendly_name: JNG Nightstand
+      supported_features: 40
+      state: 'on'
+    light.hue_color_lamp_1:
+      min_mireds: 153
+      max_mireds: 500
+      supported_color_modes:
+      - color_temp
+      - xy
+      color_mode: xy
+      brightness: 1
+      hs_color:
+      - 33.767
+      - 84.314
+      rgb_color:
+      - 255
+      - 161
+      - 40
+      xy_color:
+      - 0.561
+      - 0.4042
+      mode: normal
+      dynamics: none
+      friendly_name: JLR Nightstand
+      supported_features: 40
+      state: 'on'
+  icon: mdi:moon-waning-crescent
+  metadata: {}
+- id: '1607246470071'
+  name: Relax
+  entities:
+    light.jng_nightstand:
+      min_mireds: 153
+      max_mireds: 500
+      supported_color_modes:
+      - color_temp
+      - xy
+      color_mode: color_temp
+      brightness: 145
+      color_temp: 451
+      hs_color:
+      - 29.737
+      - 83.879
+      rgb_color:
+      - 255
+      - 147
+      - 41
+      xy_color:
+      - 0.577
+      - 0.388
+      mode: normal
+      dynamics: none
+      friendly_name: JNG Nightstand
+      supported_features: 40
+      state: 'on'
+    light.hue_color_lamp_1:
+      min_mireds: 153
+      max_mireds: 500
+      supported_color_modes:
+      - color_temp
+      - xy
+      color_mode: color_temp
+      brightness: 145
+      color_temp: 443
+      hs_color:
+      - 29.599
+      - 82.123
+      rgb_color:
+      - 255
+      - 148
+      - 45
+      xy_color:
+      - 0.574
+      - 0.388
+      mode: normal
+      dynamics: none
+      friendly_name: JLR Nightstand
+      supported_features: 40
+      state: 'on'
+  icon: mdi:sofa
+  metadata: {}
+- id: '1607246522727'
+  name: Bright
+  entities:
+    light.jng_nightstand:
+      min_mireds: 153
+      max_mireds: 500
+      supported_color_modes:
+      - color_temp
+      - xy
+      color_mode: color_temp
+      brightness: 255
+      hs_color:
+      - 28.327
+      - 64.71
+      rgb_color:
+      - 255
+      - 167
+      - 89
+      xy_color:
+      - 0.524
+      - 0.387
+      mode: normal
+      dynamics: none
+      friendly_name: JNG Nightstand
+      supported_features: 40
+      color_temp: 366
+      state: 'on'
+    light.hue_color_lamp_1:
+      min_mireds: 153
+      max_mireds: 500
+      supported_color_modes:
+      - color_temp
+      - xy
+      color_mode: color_temp
+      brightness: 145
+      color_temp: 371
+      hs_color:
+      - 28.406
+      - 65.883
+      rgb_color:
+      - 255
+      - 166
+      - 86
+      xy_color:
+      - 0.527
+      - 0.388
+      mode: normal
+      dynamics: none
+      friendly_name: JLR Nightstand
+      supported_features: 40
+      state: 'on'
+  icon: mdi:lightbulb
+  metadata: {}
+- id: '1620710923891'
+  name: Living Room Off
+  entities:
+    light.left_ent_center:
+      friendly_name: Left Ent Center
+      supported_features: 41
+      state: 'off'
+    light.right_ent_center:
+      friendly_name: Right Ent Center
+      supported_features: 41
+      state: 'off'
+    light.light_strip:
+      min_mireds: 153
+      max_mireds: 500
+      effect_list:
+      - colorloop
+      - random
+      friendly_name: Light Strip
+      supported_features: 63
+      state: 'off'
+  icon: mdi:home-lightbulb-outline
+- id: '1620711402201'
+  name: Bedroom Off
+  entities:
+    light.jng_nightstand:
+      min_mireds: 153
+      max_mireds: 500
+      supported_color_modes:
+      - color_temp
+      - xy
+      mode: normal
+      dynamics: none
+      friendly_name: JNG Nightstand
+      supported_features: 40
+      state: 'off'
+    light.hue_color_lamp_1:
+      min_mireds: 153
+      max_mireds: 500
+      supported_color_modes:
+      - color_temp
+      - xy
+      mode: normal
+      dynamics: none
+      friendly_name: JLR Nightstand
+      supported_features: 40
+      state: 'off'
+  icon: mdi:moon-new
+  metadata: {}

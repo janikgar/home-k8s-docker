@@ -1,0 +1,53 @@
+# Configure a default setup of Home Assistant (frontend, api, etc)
+default_config:
+
+prometheus:
+  namespace: hass
+
+# Text to speech
+tts:
+  - platform: google_translate
+
+group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+
+http:
+  use_x_forwarded_for: true
+  trusted_proxies:
+    - 192.168.1.28
+    - 127.0.0.1
+    - ::1
+
+device_tracker:
+  - platform: synology_srm
+    host: 192.168.1.1
+    password: !secret syno_srm_password
+
+sensor:
+  - platform: wsdot
+    api_key: !secret wsdot_api_key
+    travel_time:
+      - id: 41
+        name: Downtown Bellevue to Renton
+      - id: 42
+        name: Downtown Bellevue to Renton (HOV)
+      - id: 101
+        name: Renton to Downtown Bellevue
+      - id: 100
+        name: Renton to Downtown Bellevue (HOV)
+
+logger:
+    default: info
+    logs:
+        custom_components.auth_header: debug
+
+sonos:
+  media_player:
+    advertise_addr: 192.168.1.28
+    hosts:
+      - 192.168.1.15
+      - 192.168.1.190
+      - 192.168.1.46
+      - 192.168.1.182  # Connect

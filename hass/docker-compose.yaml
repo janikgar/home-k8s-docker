@@ -1,0 +1,11 @@
+services:
+  hass:
+    container_name: home_assistant
+    image: "ghcr.io/home-assistant/home-assistant:2024.11.3@sha256:988ae0f8bab0620d7e9abdcf07f8a8f6d88f5ae301749e61e6cf00aaed13a19b"
+    volumes:
+      - /volume1/docker/hass/config:/config
+      - /etc/localtime:/etc/localtime:ro
+      - /run/dbus:/run/dbus:ro
+    restart: unless-stopped
+    ports:
+      - "31823:8123"

@@ -19,7 +19,6 @@ services:
     restart: always
     labels:
       - "diun.enable=true"
-    restart: always
     deploy:
       restart_policy:
         condition: any
@@ -42,7 +41,6 @@ services:
     restart: always
     labels:
       - "diun.enable=true"
-    restart: always
     deploy:
       restart_policy:
         condition: any
@@ -58,7 +56,6 @@ services:
     restart: always
     labels:
       - "diun.enable=true"
-    restart: always
     deploy:
       restart_policy:
         condition: any

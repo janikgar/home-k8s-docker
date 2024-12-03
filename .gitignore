@@ -6,6 +6,14 @@ diun/data/diun.db
 fail2ban/config/log
 fail2ban/config/fail2ban/**
 
+hass/config/secrets.yaml
+hass/config/.storage/**
+hass/config/home-assistant.log*
+hass/config/home-assistant_v2.db*
+hass/config/nexia_config_*
+hass/config/.HA_VERSION
+hass/config/blueprints/**
+
 loki/loki/**
 
 ntfy/cache

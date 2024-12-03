@@ -7,9 +7,9 @@ route:
   receiver: email
 
 receivers:
- - name: 'discord'
-   discord_configs:
-     webhook_url_file: /var/run/secrets/discord_webhook.txt
+  - name: 'discord'
+    discord_configs:
+      - webhook_url_file: /var/run/secrets/discord_webhook.txt
   - name: 'ntfy'
     webhook_configs:
       - url: https://ntfy.home.lan/alertmanager

@@ -1,0 +1,58 @@
+- id: '1620012757523'
+  alias: Dim Lights at Sunset
+  description: ''
+  trigger:
+  - platform: event
+    event_type: sun
+  condition:
+  - condition: state
+    entity_id: light.living_room
+    state: 'on'
+  action:
+  - service: scene.turn_on
+    data: {}
+    entity_id: scene.living_room_medium
+  mode: single
+- id: '1620012858560'
+  alias: Undim Lights after Sunrise
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: sun.sun
+    from: below_horizon
+    to: above_horizon
+    for: 5s
+  condition:
+  - condition: state
+    entity_id: light.living_room
+    state: 'on'
+  action:
+  - service: scene.turn_on
+    data: {}
+    entity_id: scene.living_room_bright
+  mode: single
+- id: '1636326314741'
+  alias: Trigger Lights Off from App
+  description: ''
+  trigger:
+  - platform: event
+    event_type: ios.action_fired
+    event_data:
+      actionName: GoodNight
+  condition: []
+  action:
+  - service: script.good_night
+  mode: single
+- id: '1653770454873'
+  alias: Alert Webhook
+  description: ''
+  trigger:
+  - platform: webhook
+    webhook_id: external_alert
+  condition: []
+  action:
+  - service: notify.mobile_app_jacobs_iphone
+    data:
+      message: '{{ trigger.json.alerts[0].labels.alertname }} ({{ trigger.json.alerts[0].status }}): {{ trigger.json.alerts[0].annotations.summary }}'
+      title: External Webhook
+  mode: single
