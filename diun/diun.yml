@@ -4,3 +4,6 @@ notif:
     topic: diun
     priority: 3
     timeout: 5s
+    templateTitle: "{{ .Entry.Image }} released"
+    templateBody: |
+      Docker tag {{ .Entry.Image }} which you subscribed to through {{ .Entry.Provider }} provider has been released.
