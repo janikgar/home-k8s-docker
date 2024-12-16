@@ -15,6 +15,7 @@ services:
       - /volume1/docker/prometheus/prometheus_data:/prometheus/data
       - /volume1/docker/prometheus/mixins:/prom/mixins
       - /volume1/docker/prometheus/hass_token.txt:/var/run/secrets/hass_token.txt:ro
+      - /volume1/docker/prometheus/hass_token_2.txt:/var/run/secrets/hass_token_2.txt:ro
       - /volume1/docker/prometheus/minio_token.txt:/var/run/secrets/minio_token.txt:ro
     restart: always
     labels:
@@ -26,7 +27,7 @@ services:
         limits:
           memory: 384M
   alertmanager:
-    image: quay.io/prometheus/alertmanager
+    image: quay.io/prometheus/alertmanager:v0.28.0-rc.0
     container_name: alertmanager
     ports:
       - "30093:9093"
@@ -36,8 +37,8 @@ services:
       - /etc/ssl/certs:/etc/ssl/certs:ro
       - /volume1/docker/prometheus/alertmanager.yaml:/etc/alertmanager/alertmanager.yaml
       - /volume1/docker/prometheus/mixins:/etc/alertmanager/mixins
-      - /volume1/docker/prometheus/email_token.txt:/var/secrets/email_token.txt:ro
-      - /volume1/docker/prometheus/discord_webhook.txt:/var/secrets/discord_webhook.txt:ro
+      - /volume1/docker/prometheus/email_token.txt:/var/run/secrets/email_token.txt:ro
+      - /volume1/docker/prometheus/discord_webhook.txt:/var/run/secrets/discord_webhook.txt:ro
     restart: always
     labels:
       - "diun.enable=true"

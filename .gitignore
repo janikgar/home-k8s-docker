@@ -13,6 +13,7 @@ hass/config/home-assistant_v2.db*
 hass/config/nexia_config_*
 hass/config/.HA_VERSION
 hass/config/blueprints/**
+hass/config/html5_push_registrations.conf
 
 loki/loki/**
 
@@ -28,6 +29,7 @@ prometheus/images/**
 prometheus/config.my-cnf
 prometheus/generator.yaml
 prometheus/hass_token.txt
+prometheus/hass_token_2.txt
 prometheus/minio_token.txt
 prometheus/email_token.txt
 prometheus/discord_webhook.txt

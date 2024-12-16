@@ -68,10 +68,10 @@ scrape_configs:
     scrape_interval: 60s
     metrics_path: /api/prometheus
     authorization:
-      credentials_file: /var/run/secrets/hass_token.txt
+      credentials_file: /var/run/secrets/hass_token_2.txt
     scheme: http
     static_configs:
-      - targets: ['192.168.1.28:8123']
+      - targets: ['192.168.1.28:31823']
   - job_name: minio-job
     authorization:
       credentials_file: /var/run/secrets/minio_token.txt
