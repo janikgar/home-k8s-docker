@@ -2,14 +2,13 @@ services:
   fail2banInit:
     image: busybox:latest
     container_name: init
-    cap_add:
-      - NET_RAW
+    network_mode: none
     volumes:
       - /var/run:/var/run
     command:
       - sh
       - -c
-      - mkdir -p /var/run/fail2ban
+      - mkdir -p /var/run/fail2ban; sleep forever
   fail2ban:
     image: lscr.io/linuxserver/fail2ban:latest
     container_name: fail2ban
@@ -37,10 +36,14 @@ services:
     container_name: fail2ban_exporter
     depends_on:
       - fail2ban
-    network_mode: bridge
+    networks:
+      - fail2ban
     volumes:
       - /var/run/fail2ban:/var/run/fail2ban:ro
     ports:
       - '9191:9191'
     labels:
       - "diun.enable=true"
+
+networks:
+  fail2ban:
