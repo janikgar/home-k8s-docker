@@ -20,7 +20,6 @@ loki/loki/**
 ntfy/cache
 
 prometheus/archive
-
 prometheus/grafana_data/**
 prometheus/prometheus_data/**
 prometheus/tempo-data/**
