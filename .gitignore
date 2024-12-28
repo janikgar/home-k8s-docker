@@ -17,6 +17,9 @@ hass/config/html5_push_registrations.conf
 
 loki/loki/**
 
+minio/data/**
+minio/secret*
+
 ntfy/cache
 
 prometheus/archive
