@@ -22,6 +22,7 @@ http:
 
 device_tracker:
   - platform: synology_srm
+    port: 5081
     host: 192.168.1.1
     password: !secret syno_srm_password
 
@@ -41,7 +42,7 @@ sensor:
 logger:
     default: info
     logs:
-        custom_components.auth_header: debug
+        homeassistant.components.webhook: debug
 
 sonos:
   media_player:
