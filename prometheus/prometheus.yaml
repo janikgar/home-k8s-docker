@@ -5,8 +5,6 @@ global:
     prometheus: prom_main
 
 rule_files:
-  - /prom/mixins/mysql/alerts.yaml
-  - /prom/mixins/mysql/rules.yaml
   - /prom/mixins/node_exporter/node_alerts.yaml
   - /prom/mixins/node_exporter/node_rules.yaml
   - /prom/mixins/custom/alerts.yaml
@@ -78,7 +76,7 @@ scrape_configs:
     metrics_path: /minio/v2/metrics/cluster
     scheme: http
     static_configs:
-    - targets: ['192.168.1.28:9000']
+    - targets: ['192.168.1.28:30900']
   - job_name: 'local_dns'
     metrics_path: /probe
     params:

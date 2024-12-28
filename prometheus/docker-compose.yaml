@@ -76,24 +76,14 @@ services:
       - "diun.enable=true"
   snmp_exporter:
     container_name: snmp_exporter
+    command:
+      - --config.file=/etc/snmp_exporter/snmp.yml
+      - --config.expand-environment-variables
     image: quay.io/prometheus/snmp-exporter
     volumes:
       - /volume1/docker/prometheus/snmp.yml:/etc/snmp_exporter/snmp.yml
     ports:
       - "9116:9116"
-    restart: always
-    labels:
-      - "diun.enable=true"
-  mysqld_exporter:
-    container_name: mysqld_exporter
-    image: quay.io/prometheus/mysqld-exporter
-    command:
-      - --config.my-cnf=/etc/mysqld_exporter/config.my-cnf
-      - --mysqld.address=192.168.1.28:3307
-    volumes:
-      - /volume1/docker/prometheus/config.my-cnf:/etc/mysqld_exporter/config.my-cnf
-    ports:
-      - "9104:9104"
     restart: always
     labels:
       - "diun.enable=true"
@@ -108,13 +98,9 @@ services:
       - /volume1/docker/prometheus/grafana.ini:/etc/grafana/grafana.ini
       - /volume1/docker/prometheus/ldap.toml
       - /volume1/docker/prometheus/grafana_data:/var/lib/grafana
-      - /run/mysqld/mysqld.sock:/run/mysqld/mysqld.sock
       - /etc/ssl/certs/ca-certificates.crt:/etc/ssl/cert.pem:ro
     env_file: .grafana.env
     environment: {}
-      #GF_RENDERING_SERVER_URL: http://host.docker.internal:30081/render
-      #GF_RENDERING_CALLBACK_URL: http://host.docker.internal:30000/
-      #GF_LOG_FILTERS: rendering:debug
     restart: always
     labels: 
       - "diun.enable=true"

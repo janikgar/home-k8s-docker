@@ -33,7 +33,7 @@ storage:
       path: /tmp/tempo/wal             # where to store the the wal locally
     s3:
       bucket: tempo                    # how to store data in s3
-      endpoint: 192.168.1.28:9000
+      endpoint: 192.168.1.28:30900
       access_key: ${MINIO_ACCESS_KEY}
       secret_key: ${MINIO_SECRET_KEY}
       insecure: true
