@@ -25,17 +25,3 @@
   action:
   - service: script.good_night
   mode: single
-- id: '1653770454873'
-  alias: Alert Webhook
-  description: ''
-  trigger:
-  - platform: webhook
-    webhook_id: external_alert
-  condition: []
-  action:
-  - service: notify.mobile_app_jacobs_iphone
-    data:
-      message: '{{ trigger.json.alerts[0].labels.alertname }} ({{ trigger.json.alerts[0].status
-        }}): {{ trigger.json.alerts[0].annotations.summary }}'
-      title: External Webhook
-  mode: single

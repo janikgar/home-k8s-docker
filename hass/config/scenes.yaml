@@ -63,28 +63,71 @@
   name: Living Room Movie
   entities:
     light.light_strip:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6535
       min_mireds: 153
       max_mireds: 500
       effect_list:
-      - colorloop
-      - random
+      - None
+      - candle
+      - fire
+      - prism
+      - sparkle
+      - opal
+      - glisten
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect: None
+      color_mode: color_temp
       brightness: 84
+      color_temp_kelvin: 3164
       color_temp: 316
-      effect: none
+      hs_color:
+      - 27.575
+      - 52.614
+      rgb_color:
+      - 255
+      - 182
+      - 120
+      xy_color:
+      - 0.482
+      - 0.38
+      mode: normal
+      dynamics: none
       friendly_name: Light Strip
-      supported_features: 63
+      supported_features: 44
       state: 'on'
     light.right_ent_center:
+      effect_list:
+      - None
+      - candle
+      supported_color_modes:
+      - brightness
+      effect: None
+      color_mode: brightness
       brightness: 71
+      mode: normal
+      dynamics: none
       friendly_name: Right Ent Center
-      supported_features: 41
+      supported_features: 44
       state: 'on'
     light.left_ent_center:
+      effect_list:
+      - None
+      - candle
+      supported_color_modes:
+      - brightness
+      effect: None
+      color_mode: brightness
       brightness: 76
+      mode: normal
+      dynamics: none
       friendly_name: Left Ent Center
-      supported_features: 41
+      supported_features: 44
       state: 'on'
   icon: mdi:brightness-4
+  metadata: {}
 - id: '1607246268954'
   name: Night Bedstand
   entities:
@@ -140,13 +183,25 @@
   name: Relax
   entities:
     light.jng_nightstand:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6535
       min_mireds: 153
       max_mireds: 500
+      effect_list:
+      - None
+      - candle
+      - fire
+      - prism
+      - sparkle
+      - opal
+      - glisten
       supported_color_modes:
       - color_temp
       - xy
+      effect: None
       color_mode: color_temp
       brightness: 145
+      color_temp_kelvin: 2217
       color_temp: 451
       hs_color:
       - 29.737
@@ -161,31 +216,43 @@
       mode: normal
       dynamics: none
       friendly_name: JNG Nightstand
-      supported_features: 40
+      supported_features: 44
       state: 'on'
-    light.hue_color_lamp_1:
+    light.jlr_nightstand:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6535
       min_mireds: 153
       max_mireds: 500
+      effect_list:
+      - None
+      - candle
+      - fire
+      - prism
+      - sparkle
+      - opal
+      - glisten
       supported_color_modes:
       - color_temp
       - xy
+      effect: None
       color_mode: color_temp
       brightness: 145
-      color_temp: 443
+      color_temp_kelvin: 2000
+      color_temp: 500
       hs_color:
-      - 29.599
-      - 82.123
+      - 30.601
+      - 94.547
       rgb_color:
       - 255
-      - 148
-      - 45
+      - 136
+      - 13
       xy_color:
-      - 0.574
-      - 0.388
+      - 0.599
+      - 0.382
       mode: normal
       dynamics: none
       friendly_name: JLR Nightstand
-      supported_features: 40
+      supported_features: 44
       state: 'on'
   icon: mdi:sofa
   metadata: {}
@@ -263,30 +330,8 @@
       supported_features: 63
       state: 'off'
   icon: mdi:home-lightbulb-outline
-- id: '1620711402201'
-  name: Bedroom Off
-  entities:
-    light.jng_nightstand:
-      min_mireds: 153
-      max_mireds: 500
-      supported_color_modes:
-      - color_temp
-      - xy
-      mode: normal
-      dynamics: none
-      friendly_name: JNG Nightstand
-      supported_features: 40
-      state: 'off'
-    light.hue_color_lamp_1:
-      min_mireds: 153
-      max_mireds: 500
-      supported_color_modes:
-      - color_temp
-      - xy
-      mode: normal
-      dynamics: none
-      friendly_name: JLR Nightstand
-      supported_features: 40
-      state: 'off'
-  icon: mdi:moon-new
+- id: '1737278663785'
+  name: MBR Off
+  entities: {}
+  icon: mdi:alarm-light-off
   metadata: {}

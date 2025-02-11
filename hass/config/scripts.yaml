@@ -1,29 +1,3 @@
-'1620011843793':
-  alias: Dim Living Room Lights at Sunset
-  sequence:
-  - condition: and
-    conditions:
-    - condition: state
-      entity_id: sun.sun
-      state: below_horizon
-    - condition: state
-      entity_id: light.living_room
-      state: 'on'
-  - scene: scene.living_room_medium
-  mode: single
-undim_living_room_lights_at_sunrise:
-  alias: Undim Living Room Lights at Sunrise
-  sequence:
-  - condition: and
-    conditions:
-    - condition: state
-      entity_id: light.living_room
-      state: 'on'
-    - condition: state
-      entity_id: sun.sun
-      state: above_horizon
-  - scene: scene.living_room_bright
-  mode: single
 good_night:
   alias: Good Night!
   sequence:

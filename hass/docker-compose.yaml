@@ -1,26 +1,24 @@
 services:
   hass:
     container_name: home_assistant
-    image: "ghcr.io/home-assistant/home-assistant:2024.11.3@sha256:988ae0f8bab0620d7e9abdcf07f8a8f6d88f5ae301749e61e6cf00aaed13a19b"
+    image: "ghcr.io/home-assistant/home-assistant:2025.1.2@sha256:df6d620d49b0d9be2edc92ac96c920b8495da161fd4d4d1b02b2876c54ab21cc"
     volumes:
       - /volume1/docker/hass/config:/config
       - /etc/localtime:/etc/localtime:ro
       - /run/dbus:/run/dbus:ro
     restart: unless-stopped
-    networks: 
-      - homeassistant
+    network_mode: host
     ports:
-      - "31823:8123"
-      - "1400:1400"
-      - "1443:1443"
-      - "1900:1900"
-      - "1901:1901"
-      - "11984:11984"
-      - "18554:18554"
-      - "18555:18555"
-      - "21064:21064"
-      - "40000:40000"
-      - "43215:43215"
-      - "51827:51827"
-networks:
-  homeassistant:
+      - 8123
+  eufy_security:
+    container_name: eufy
+    image: "bropat/eufy-security-ws:1.9.1@sha256:413e80b7536520b14a57ada1509d4c42ab618b81376bd481125008690e1dd596"
+    volumes:
+      - /volume1/docker/hass/eufy:/data
+    env_file: .eufy.env
+    environment:
+      PORT: "32000"
+    restart: unless-stopped
+    network_mode: host
+    ports:
+      - 32000
