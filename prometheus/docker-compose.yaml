@@ -87,42 +87,6 @@ services:
     restart: always
     labels:
       - "diun.enable=true"
-  grafana:
-    container_name: grafana
-    image: grafana/grafana
-    ports:
-      - "30000:3000"
-    extra_hosts:
-      - host.docker.internal:host-gateway
-    volumes:
-      - /volume1/docker/prometheus/grafana.ini:/etc/grafana/grafana.ini
-      - /volume1/docker/prometheus/ldap.toml
-      - /volume1/docker/prometheus/grafana_data:/var/lib/grafana
-      - /etc/ssl/certs/ca-certificates.crt:/etc/ssl/cert.pem:ro
-    env_file: .grafana.env
-    environment: {}
-    restart: always
-    labels: 
-      - "diun.enable=true"
-    deploy:
-      restart_policy:
-        condition: any
-      resources:
-        limits:
-          memory: 256M
-  grafana_renderer:
-    container_name: grafana_renderer
-    image: grafana/grafana-image-renderer
-    ports:
-      - 30081:8081
-    extra_hosts:
-      - host.docker.internal:host-gateway
-    restart: always
-    labels: 
-      - "diun.enable=true"
-    deploy:
-      restart_policy:
-        condition: any
   tempo:
     container_name: tempo
     image: grafana/tempo:latest

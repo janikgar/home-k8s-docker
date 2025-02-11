@@ -1,0 +1,70 @@
+services:
+  grafana:
+    container_name: grafana
+    image: grafana/grafana@sha256:d8ea37798ccc41061a62ab080f2676dda6bf7815558499f901bdb0f533a456fb
+    ports:
+      - "30000:3000"
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    volumes:
+      - /volume1/docker/grafana/grafana.ini:/etc/grafana/grafana.ini
+      - /volume1/docker/grafana/ldap.toml
+      - /volume1/docker/grafana/grafana_data:/var/lib/grafana
+      - /etc/ssl/certs/ca-certificates.crt:/etc/ssl/cert.pem:ro
+    env_file: .grafana.env
+    environment: {}
+    networks:
+      - prometheus_default
+    restart: always
+    labels: 
+      - "diun.enable=true"
+    depends_on:
+      - grafana_db
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+  grafana_db:
+    container_name: grafana_db
+    image: postgres:17.2@sha256:87ec5e0a167dc7d4831729f9e1d2ee7b8597dcc49ccd9e43cc5f89e808d2adae
+    ports:
+      - 5432
+    restart: always
+    env_file: .pg.env
+    environment:
+      POSTGRES_USER: grafana
+      POSTGRES_DB: grafana
+    networks:
+      - prometheus_default
+    volumes:
+      - /volume1/docker/grafana/pg_data:/var/lib/postgresql/data
+#  migrate_db:
+#    container_name: pgloader
+#    image: ghcr.io/dimitri/pgloader:latest@sha256:6585a3f220220ae79a31671cae5d3dcf382f495d3c42516af74f38af681f8c20
+#    command:
+#      - sleep
+#      - infinity
+#    networks:
+#      - prometheus_default
+#    volumes:
+#      - /volume1/docker/grafana/grafana_data:/data
+#    depends_on:
+#      - grafana_db
+  grafana_renderer:
+    container_name: grafana_renderer
+    image: grafana/grafana-image-renderer
+    ports:
+      - 30081:8081
+    networks:
+      - prometheus_default
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    restart: always
+    labels: 
+      - "diun.enable=true"
+    deploy:
+      restart_policy:
+        condition: any
+networks:
+  prometheus_default:
+    external: true

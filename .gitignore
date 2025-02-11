@@ -14,6 +14,10 @@ hass/config/nexia_config_*
 hass/config/.HA_VERSION
 hass/config/blueprints/**
 hass/config/html5_push_registrations.conf
+hass/config/tts
+hass/config/custom_components/
+hass/config/hacs.sh
+hass/eufy
 
 loki/loki/**
 
@@ -21,6 +25,9 @@ minio/data/**
 minio/secret*
 
 ntfy/cache
+
+grafana/grafana_data/**
+grafana/pg_data/**
 
 prometheus/archive
 prometheus/grafana_data/**
