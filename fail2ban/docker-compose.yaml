@@ -27,12 +27,11 @@ services:
       - /var/run/fail2ban:/var/run/fail2ban
       - /var/log:/var/log:ro
       - /var/log/nginx:/remotelogs/nginx:ro
-      - /var/packages/homeassistant/var:/remotelogs/homeassistant:ro
     restart: always
     labels:
       - "diun.enable=true"
   fail2ban_exporter:
-    image: registry.gitlab.com/hectorjsmith/fail2ban-prometheus-exporter:latest
+    image: registry.gitlab.com/hctrdev/fail2ban-prometheus-exporter:latest
     container_name: fail2ban_exporter
     depends_on:
       - fail2ban
