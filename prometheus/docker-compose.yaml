@@ -10,6 +10,7 @@ services:
       - --storage.tsdb.min-block-duration=2h
       - --storage.tsdb.max-block-duration=2h
       - --enable-feature=promql-at-modifier
+      - --web.enable-admin-api
     volumes:
       - /volume1/docker/prometheus/prometheus.yaml:/prom/prometheus.yaml
       - /volume1/docker/prometheus/prometheus_data:/prometheus/data
@@ -18,6 +19,12 @@ services:
       - /volume1/docker/prometheus/hass_token_2.txt:/var/run/secrets/hass_token_2.txt:ro
       - /volume1/docker/prometheus/minio_token.txt:/var/run/secrets/minio_token.txt:ro
     restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "printf 'GET /-/healthy HTTP/1.1\r\nHost: localhost\r\n\r\n' | nc -w1 localhost 9090 | grep '200 OK'"]
+      interval: 1m
+      timeout: 10s
+      retries: 3
+      start_period: 2m
     labels:
       - "diun.enable=true"
     deploy:
@@ -40,6 +47,12 @@ services:
       - /volume1/docker/prometheus/email_token.txt:/var/run/secrets/email_token.txt:ro
       - /volume1/docker/prometheus/discord_webhook.txt:/var/run/secrets/discord_webhook.txt:ro
     restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "printf 'GET /-/healthy HTTP/1.1\r\nHost: localhost\r\n\r\n' | nc -w1 localhost 9093 | grep '200 OK'"]
+      interval: 1m
+      timeout: 10s
+      retries: 3
+      start_period: 2m
     labels:
       - "diun.enable=true"
     deploy:
@@ -50,11 +63,17 @@ services:
     container_name: node_exporter
     command: --path.rootfs=/host
     ports:
-      - "9100:9100"
+      - "30091:9100"
     volumes:
       - "/:/host:ro"
       - "/sys:/sys:ro"
     restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "printf 'GET /-/healthy HTTP/1.1\r\nHost: localhost\r\n\r\n' | nc -w1 localhost 9100 | grep '200 OK'"]
+      interval: 1m
+      timeout: 10s
+      retries: 3
+      start_period: 2m
     labels:
       - "diun.enable=true"
     deploy:
@@ -65,13 +84,19 @@ services:
     image: quay.io/prometheus/blackbox-exporter
     command: --config.file=/config/blackbox.yaml
     ports:
-      - "9115:9115"
+      - "30095:9115"
     volumes:
       - /volume1/docker/prometheus/blackbox.yaml:/config/blackbox.yaml
     cap_add:
       - NET_ADMIN
       - NET_RAW
     restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "printf 'GET /-/healthy HTTP/1.1\r\nHost: localhost\r\n\r\n' | nc -w1 localhost 9115 | grep '200 OK'"]
+      interval: 1m
+      timeout: 10s
+      retries: 3
+      start_period: 2m
     labels:
       - "diun.enable=true"
   snmp_exporter:
@@ -83,25 +108,46 @@ services:
     volumes:
       - /volume1/docker/prometheus/snmp.yml:/etc/snmp_exporter/snmp.yml
     ports:
-      - "9116:9116"
+      - "30096:9116"
     restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "printf 'GET /-/healthy HTTP/1.1\r\nHost: localhost\r\n\r\n' | nc -w1 localhost 9116 | grep '200 OK'"]
+      interval: 1m
+      timeout: 10s
+      retries: 3
+      start_period: 2m
     labels:
       - "diun.enable=true"
-  tempo:
-    container_name: tempo
-    image: grafana/tempo:latest
-    env_file: .tempo.env
-    command: 
-      - -config.file=/etc/tempo.yaml
-      - -config.expand-env=true
-    volumes:
-      - ./tempo-s3.yaml:/etc/tempo.yaml
-      - ./tempo-data:/tmp/tempo
+  #tempo:
+  #  container_name: tempo
+  #  image: grafana/tempo:latest
+  #  env_file: .tempo.env
+  #  command: 
+  #    - -config.file=/etc/tempo.yaml
+  #    - -config.expand-env=true
+  #  volumes:
+  #    - ./tempo-s3.yaml:/etc/tempo.yaml
+  #    - ./tempo-data:/tmp/tempo
+  #  ports:
+  #    - "14268"      # jaeger
+  #    - "32001:3200"  # tempo
+  #    - "32317:4317"  # otlp grpc
+  #    - "32318:4318"  # otlp http
+  #  restart: on-failure
+  #  labels:
+  #    - "diun.enable=true"
+  cadvisor:
+    container_name: cadvisor
+    image: gcr.io/cadvisor/cadvisor:latest
+    restart: unless-stopped
+    entrypoint:
+      - /usr/bin/cadvisor
+      - --logtostderr
+      - --store_container_labels=false
     ports:
-      - "14268"      # jaeger
-      - "32001:3200"  # tempo
-      - "32317:4317"  # otlp grpc
-      - "32318:4318"  # otlp http
-    restart: on-failure
-    labels:
-      - "diun.enable=true"
+      - "30080:8080"
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker:/var/lib/docker:ro

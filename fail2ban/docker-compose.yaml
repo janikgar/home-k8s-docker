@@ -8,7 +8,7 @@ services:
     command:
       - sh
       - -c
-      - mkdir -p /var/run/fail2ban; sleep forever
+      - mkdir -p /var/run/fail2ban || exit 0
   fail2ban:
     image: lscr.io/linuxserver/fail2ban:latest
     container_name: fail2ban
@@ -18,6 +18,12 @@ services:
       - NET_ADMIN
       - NET_RAW
     network_mode: host
+    healthcheck:
+      test: ["CMD-SHELL", "fail2ban-client ping || exit 1"]
+      interval: 2m
+      timeout: 10s
+      retries: 3
+      start_period: 1m
     environment:
       - PUID=1000
       - PGID=1000
@@ -33,6 +39,7 @@ services:
   fail2ban_exporter:
     image: registry.gitlab.com/hctrdev/fail2ban-prometheus-exporter:latest
     container_name: fail2ban_exporter
+    restart: always
     depends_on:
       - fail2ban
     networks:

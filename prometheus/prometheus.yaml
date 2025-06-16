@@ -16,7 +16,7 @@ alerting:
     - scheme: http
       static_configs:
         - targets:
-          - "alertmanager:9093"
+          - "192.168.1.28:30093"
 
 scrape_configs:
   - job_name: router
@@ -40,12 +40,12 @@ scrape_configs:
   - job_name: syno_node
     static_configs:
       - targets:
-        - 'node_exporter:9100'
+        - '192.168.1.28:30091'
     metric_relabel_configs: *commonRelabels
   - job_name: prometheus
     static_configs:
       - targets:
-        - 'prometheus:9090'
+        - '192.168.1.28:30001'
     metric_relabel_configs: *commonRelabels
   - job_name: k8s_node
     static_configs:
@@ -69,14 +69,20 @@ scrape_configs:
       credentials_file: /var/run/secrets/hass_token_2.txt
     scheme: http
     static_configs:
-      - targets: ['192.168.1.28:31823']
-  - job_name: minio-job
-    authorization:
-      credentials_file: /var/run/secrets/minio_token.txt
-    metrics_path: /minio/v2/metrics/cluster
-    scheme: http
-    static_configs:
-    - targets: ['192.168.1.28:30900']
+      - targets: ['192.168.1.28:8123']
+    metric_relabel_configs:
+      - source_labels: [__name__]
+        regex: 'hass_(state_change_(total|created)|last_updated_time_seconds|entity_available)'
+        action: drop
+      - regex: friendly_name
+        action: labeldrop
+#  - job_name: minio-job
+#    authorization:
+#      credentials_file: /var/run/secrets/minio_token.txt
+#    metrics_path: /minio/v2/metrics/cluster
+#    scheme: http
+#    static_configs:
+#    - targets: ['192.168.1.28:30900']
   - job_name: 'local_dns'
     metrics_path: /probe
     params:
@@ -91,7 +97,7 @@ scrape_configs:
       - source_labels: [__param_target]
         target_label: instance
       - target_label: __address__
-        replacement: blackbox_exporter:9115
+        replacement: 192.168.1.28:30095
   - job_name: 'remote_dns'
     metrics_path: /probe
     params:
@@ -106,7 +112,7 @@ scrape_configs:
       - source_labels: [__param_target]
         target_label: instance
       - target_label: __address__
-        replacement: blackbox_exporter:9115
+        replacement: 192.168.1.28:30095
   - job_name: 'snmp'
     metrics_path: /snmp
     params:
@@ -127,8 +133,12 @@ scrape_configs:
       - source_labels: [__param_target]
         target_label: instance
       - target_label: __address__
-        replacement: snmp_exporter:9116
-      - regex: "lxc.*"
+        replacement: 192.168.1.28:30096
+    metric_relabel_configs:
+      - source_labels: [ifName]
+        regex: "lxc.*"
+        action: drop
+      - regex: "ifIndex"
         action: labeldrop
   - job_name: 'syno'
     metrics_path: /snmp
@@ -145,7 +155,7 @@ scrape_configs:
       - source_labels: [__param_target]
         target_label: instance
       - target_label: __address__
-        replacement: snmp_exporter:9116
+        replacement: 192.168.1.28:30096
       - regex: diskSMARTInfoIndex
         action: labeldrop
       - source_labels: [ifName]
@@ -165,25 +175,35 @@ scrape_configs:
       - source_labels: [__param_target]
         target_label: instance
       - target_label: __address__
-        replacement: blackbox_exporter:9115
+        replacement: 192.168.1.28:30095
   - job_name: 'fail2ban'
     static_configs:
       - targets:
         - '192.168.1.28:9191'
-  - job_name: mysql
-    static_configs:
-      - targets:
-        - 192.168.1.28:3307
-    relabel_configs:
-        - source_labels: [__address__]
-          target_label: __param_target
-        - source_labels: [__param_target]
-          target_label: instance
-        - target_label: __address__
-          replacement: mysqld_exporter:9104
-  - job_name: 'tempo'
-    static_configs:
-      - targets: [ '192.168.1.28:32001' ]
   - job_name: loki
     static_configs:
       - targets: [ '192.168.1.28:30002' ]
+    relabel_configs:
+      - target_label: cluster
+        replacement: syno
+      - target_label: namespace
+        replacement: all
+  - job_name: immich_server
+    static_configs:
+      - targets: ['192.168.1.28:8081']
+  - job_name: immich_backend
+    static_configs:
+      - targets: ['192.168.1.28:8082']
+  - job_name: cadvisor
+    static_configs:
+      - targets: ['192.168.1.28:30080']
+    metric_relabel_configs:
+      - regex: "container_label.*"
+        action: labeldrop
+  - job_name: dockerd
+    static_configs:
+      - targets: ['192.168.1.28:9323']
+    metric_relabel_configs:
+      - source_labels: [__name__]
+        regex: "swarm.*|etcd.*|builder.*"
+        action: drop

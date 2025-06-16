@@ -1,7 +1,7 @@
 services:
   grafana:
     container_name: grafana
-    image: grafana/grafana@sha256:d8ea37798ccc41061a62ab080f2676dda6bf7815558499f901bdb0f533a456fb
+    image: grafana/grafana@sha256:263cbefd5d9b179893c47c415daab4da5c1f3d6770154741eca4f45c81119884
     ports:
       - "30000:3000"
     extra_hosts:
@@ -16,6 +16,12 @@ services:
     networks:
       - prometheus_default
     restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "curl -s -m 10 localhost:3000/api/health || exit 1"]
+      interval: 1m
+      timeout: 10s
+      retries: 5
+      start_period: 5m
     labels: 
       - "diun.enable=true"
     depends_on:
@@ -28,8 +34,14 @@ services:
     container_name: grafana_db
     image: postgres:17.2@sha256:87ec5e0a167dc7d4831729f9e1d2ee7b8597dcc49ccd9e43cc5f89e808d2adae
     ports:
-      - 5432
+      - "30020:5432"
     restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "psql -U grafana -c 'select 1;' || exit 1"]
+      interval: 1m
+      timeout: 10s
+      retries: 3
+      start_period: 2m
     env_file: .pg.env
     environment:
       POSTGRES_USER: grafana
@@ -50,21 +62,21 @@ services:
 #      - /volume1/docker/grafana/grafana_data:/data
 #    depends_on:
 #      - grafana_db
-  grafana_renderer:
-    container_name: grafana_renderer
-    image: grafana/grafana-image-renderer
-    ports:
-      - 30081:8081
-    networks:
-      - prometheus_default
-    extra_hosts:
-      - host.docker.internal:host-gateway
-    restart: always
-    labels: 
-      - "diun.enable=true"
-    deploy:
-      restart_policy:
-        condition: any
+#  grafana_renderer:
+#    container_name: grafana_renderer
+#    image: grafana/grafana-image-renderer
+#    ports:
+#      - 30081:8081
+#    networks:
+#      - prometheus_default
+#    extra_hosts:
+#      - host.docker.internal:host-gateway
+#    restart: always
+#    labels: 
+#      - "diun.enable=true"
+#    deploy:
+#      restart_policy:
+#        condition: any
 networks:
   prometheus_default:
     external: true

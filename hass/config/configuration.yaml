@@ -1,5 +1,22 @@
-# Configure a default setup of Home Assistant (frontend, api, etc)
-default_config:
+#default_config:
+
+api:
+backup:
+config:
+dhcp:
+energy:
+history:
+homeassistant_alerts:
+logbook:
+media_source:
+mobile_app:
+my:
+ssdp:
+stream:
+sun:
+usb:
+webhook:
+zeroconf:
 
 prometheus:
   namespace: hass
@@ -41,8 +58,8 @@ sensor:
 
 logger:
     default: info
-    logs:
-        homeassistant.components.webhook: debug
+    logs: {}
+#        homeassistant.components.webhook: debug
 
 sonos:
   media_player:

@@ -1,24 +1,29 @@
 services:
   hass:
     container_name: home_assistant
-    image: "ghcr.io/home-assistant/home-assistant:2025.1.2@sha256:df6d620d49b0d9be2edc92ac96c920b8495da161fd4d4d1b02b2876c54ab21cc"
+    image: "ghcr.io/home-assistant/home-assistant:2025.5.3@sha256:8a99004ff832dbd535e6ac4d141042bc31141ff6a86b4d5bb288b3680fbceac1"
     volumes:
       - /volume1/docker/hass/config:/config
+      #- /usr/share/zoneinfo/America/Chicago:/etc/localtime:ro
       - /etc/localtime:/etc/localtime:ro
       - /run/dbus:/run/dbus:ro
-    restart: unless-stopped
+    restart: always
     network_mode: host
-    ports:
-      - 8123
-  eufy_security:
-    container_name: eufy
-    image: "bropat/eufy-security-ws:1.9.1@sha256:413e80b7536520b14a57ada1509d4c42ab618b81376bd481125008690e1dd596"
-    volumes:
-      - /volume1/docker/hass/eufy:/data
-    env_file: .eufy.env
-    environment:
-      PORT: "32000"
-    restart: unless-stopped
-    network_mode: host
-    ports:
-      - 32000
+    healthcheck:
+      test: ["CMD-SHELL", "curl -s -O </dev/null -m 2 localhost:8123 || exit 1"]
+      interval: 1m
+      timeout: 5s
+      retries: 3
+      start_period: 1m
+  #eufy_security:
+  #  container_name: eufy
+  #  image: "bropat/eufy-security-ws:1.9.1@sha256:413e80b7536520b14a57ada1509d4c42ab618b81376bd481125008690e1dd596"
+  #  volumes:
+  #    - /volume1/docker/hass/eufy:/data
+  #  env_file: .eufy.env
+  #  environment:
+  #    PORT: "32000"
+  #  restart: unless-stopped
+  #  network_mode: host
+  #  ports:
+  #    - 32000

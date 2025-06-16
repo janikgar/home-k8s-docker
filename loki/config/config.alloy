@@ -1,0 +1,75 @@
+loki.source.syslog "syslog" {
+	listener {
+		address               = "0.0.0.0:1514"
+		protocol              = "udp"
+		idle_timeout          = "1m0s"
+		label_structured_data = true
+		labels                = {
+			job = "syslog",
+		}
+		max_message_length = 0
+	}
+	forward_to    = [loki.write.default.receiver]
+	relabel_rules = null
+}
+
+local.file_match "docker" {
+	path_targets = [{
+		__address__ = "localhost",
+		__path__    = "/var/docker/**/*log",
+		job         = "docker",
+	}]
+}
+
+loki.process "docker" {
+	forward_to = [loki.write.default.receiver]
+
+	stage.json {
+		expressions = {
+			container = "attrs.tag",
+		}
+	}
+
+	stage.labels {
+		values = {
+			container = null,
+			stream    = null,
+		}
+	}
+
+	stage.timestamp {
+		source = "timestamp"
+		format = "RFC3339Nano"
+	}
+
+	stage.output {
+		source = "output"
+	}
+}
+
+loki.source.file "docker" {
+	targets               = local.file_match.docker.targets
+	forward_to            = [loki.process.docker.receiver]
+	legacy_positions_file = "/tmp/positions.yaml"
+}
+
+local.file_match "system" {
+	path_targets = [{
+		__address__ = "localhost",
+		__path__    = "/var/log/**/*log",
+		job         = "varstarlogs",
+	}]
+}
+
+loki.source.file "system" {
+	targets               = local.file_match.system.targets
+	forward_to            = [loki.write.default.receiver]
+	legacy_positions_file = "/tmp/positions.yaml"
+}
+
+loki.write "default" {
+	endpoint {
+		url = "http://192.168.1.28:30002/loki/api/v1/push"
+	}
+	external_labels = {}
+}

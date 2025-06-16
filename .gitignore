@@ -12,12 +12,19 @@ hass/config/home-assistant.log*
 hass/config/home-assistant_v2.db*
 hass/config/nexia_config_*
 hass/config/.HA_VERSION
+hass/config/.s6-svscan/
 hass/config/blueprints/**
 hass/config/html5_push_registrations.conf
 hass/config/tts
 hass/config/custom_components/
 hass/config/hacs.sh
+hass/config/deps/event/
+hass/config/curl_response
+hass/config/deps/
 hass/eufy
+
+immich/library/
+immich/postgres/
 
 loki/loki/**
 
