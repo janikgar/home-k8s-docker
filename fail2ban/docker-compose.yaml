@@ -10,7 +10,7 @@ services:
       - -c
       - mkdir -p /var/run/fail2ban || exit 0
   fail2ban:
-    image: lscr.io/linuxserver/fail2ban:latest
+    image: lscr.io/linuxserver/fail2ban:1.1.0-r2-ls13
     container_name: fail2ban
     depends_on:
       - fail2banInit
@@ -37,7 +37,7 @@ services:
     labels:
       - "diun.enable=true"
   fail2ban_exporter:
-    image: registry.gitlab.com/hctrdev/fail2ban-prometheus-exporter:latest
+    image: registry.gitlab.com/hctrdev/fail2ban-prometheus-exporter:0.10.3
     container_name: fail2ban_exporter
     restart: always
     depends_on:
