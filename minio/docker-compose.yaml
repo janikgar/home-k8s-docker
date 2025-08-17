@@ -13,7 +13,7 @@ services:
       MINIO_ROOT_USER_FILE: /var/run/secrets/root_user.txt
       MINIO_ROOT_PASSWORD_FILE: /var/run/secrets/root_password.txt
     container_name: minio
-    image: quay.io/minio/minio:RELEASE.2025-04-22T22-12-26Z@sha256:3f97c5651cb6662b880c787a232b6b34fec8d8922e08d6617b25d241a21164bb
+    image: quay.io/minio/minio:RELEASE.2025-04-22T22-12-26Z@sha256:a1ea29fa28355559ef137d71fc570e508a214ec84ff8083e39bc5428980b015e
     command: minio server --console-address :9001
     user: "1032:100"
     networks:
