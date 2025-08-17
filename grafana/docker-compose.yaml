@@ -1,7 +1,7 @@
 services:
   grafana:
     container_name: grafana
-    image: grafana/grafana@sha256:263cbefd5d9b179893c47c415daab4da5c1f3d6770154741eca4f45c81119884
+    image: grafana/grafana@sha256:38e62c46a4a0f8b6124ad318f42c65ad6ac7644ab1f7d90a582d847ced28180c
     ports:
       - "30000:3000"
     extra_hosts:
