@@ -1,0 +1,55 @@
+target: all,alertmanager,overrides-exporter
+
+# Configure Mimir to use Minio as object storage backend.
+common:
+  storage:
+    backend: s3
+    s3:
+      insecure: true
+      region: homelab
+      endpoint: 192.168.1.28:30900
+      access_key_id: ${AWS_ACCESS_KEY_ID}
+      secret_access_key: ${AWS_SECRET_ACCESS_KEY}
+
+memberlist:
+  join_members: [mimir-1, mimir-2, mimir-3]
+
+# Blocks storage requires a prefix when using a common object storage bucket.
+blocks_storage:
+  s3:
+    bucket_name: mimir-blocks
+
+alertmanager_storage:
+  s3:
+    bucket_name: mimir-alertmanager
+
+ruler_storage:
+  s3:
+    bucket_name: mimir-ruler
+
+ruler:
+  rule_path: /data/ruler
+  alertmanager_url: http://192.168.1.28:30093/alertmanager
+  ring:
+    # Quickly detect unhealthy rulers to speed up the tutorial.
+    heartbeat_period: 2s
+    heartbeat_timeout: 10s
+
+alertmanager:
+  data_dir: /data/alertmanager
+  fallback_config_file: /etc/alertmanager/alertmanager.yaml
+  external_url: http://localhost:9009/alertmanager
+
+server:
+  log_level: warn
+
+usage_stats:
+  enabled: false
+
+limits:
+  compactor_blocks_retention_period: 1y
+  compactor_block_upload_enabled: true
+  native_histograms_ingestion_enabled: true
+
+runtime_config:
+  file: /etc/runtime.yaml

@@ -1,29 +1,6 @@
 version: "3.8"
 
 services:
-
-  # Since the Loki containers are running as user 10001 and the mounted data volume is owned by root,
-  # Loki would not have permissions to create the directories.
-  # Therefore the init container changes permissions of the mounted directory.
-
-  alloy:
-    image: grafana/alloy:latest
-    container_name: alloy
-    volumes:
-      - /var/log:/var/log
-      - /volume1/docker/fail2ban/config/log/fail2ban:/var/log/fail2ban
-      - /volume1/@appdata/homeassistant:/var/log/homeassistant
-      - /volume1/@appdata/Docker/docker/containers:/var/docker
-      - ./config/config.alloy:/etc/alloy/config.alloy:ro
-    ports:
-      - "12345:12345"
-      - "1514:1514"
-    networks:
-      - loki
-    labels:
-      - "diun.enable=true"
-    restart: always
-
   loki:
     image: grafana/loki:3.2.0
     container_name: loki
@@ -45,10 +22,6 @@ services:
       start_period: 2m
     labels:
       - "diun.enable=true"
-    deploy:
-      resources:
-        limits:
-          memory: 768M
 
 networks:
   loki:

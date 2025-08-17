@@ -1,0 +1,3 @@
+overrides:
+  default:
+    ingestion_rate: 100000

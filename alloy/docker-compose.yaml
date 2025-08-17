@@ -1,0 +1,27 @@
+version: "3.8"
+
+services:
+  alloy:
+    image: grafana/alloy:latest
+    container_name: alloy
+    command:
+      - run
+      - /etc/alloy/config.alloy
+      - --storage.path=/var/lib/alloy/data
+      - --server.http.listen-addr=0.0.0.0:12345
+    volumes:
+      - /var/log:/var/log
+      - /var/run:/var/run:rw
+      - /volume1/docker/fail2ban/config/log/fail2ban:/var/log/fail2ban
+      - /volume1/@appdata/homeassistant:/var/log/homeassistant
+      - /volume1/@appdata/Docker/docker/containers:/var/docker
+      - ./config:/etc/alloy
+      - /:/rootfs:ro
+      - /sys:/sys:ro
+      - /var/lib/docker:/var/lib/docker:ro
+
+    ports:
+      - "12345:12345"
+      - "1514:1514"
+    restart: always
+

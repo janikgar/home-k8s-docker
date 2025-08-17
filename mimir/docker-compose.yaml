@@ -1,0 +1,70 @@
+version: '3.8'
+
+services:
+  nginx:
+    container_name: mimir-lb
+    image: nginxinc/nginx-unprivileged:alpine@sha256:ab65b54084aa6901197e85ab8b91ce7ad1718ceb395479d28b9634271695aa93
+    volumes:
+      - /volume1/docker/mimir/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - mimir-1
+      - mimir-2
+      - mimir-3
+    ports:
+      - 30909:9009
+
+
+  mimir-1: &mimirConf
+    container_name: mimir-1
+    hostname: mimir-1
+    image: grafana/mimir:2.16.1@sha256:96725973b39bc3e5f81171ccbedd3a4ff4b3674d254838e51c60aec4e54e80df
+    working_dir: /data/mimir
+    command: 
+      - -config.file=/etc/mimir.yaml
+      - -config.expand-env=true
+    env_file:
+      - /volume1/docker/mimir/.env
+    volumes:
+      - &config
+        /volume1/docker/mimir/config.yaml:/etc/mimir.yaml:ro
+      - &runtime
+        /volume1/docker/mimir/runtime.yaml:/etc/runtime.yaml:ro
+      - &amConf
+        /volume1/docker/mimir/alertmanager.yaml:/etc/alertmanager/alertmanager.yaml:ro
+      - &amMixins
+        /volume1/docker/mimir/mixins:/etc/alertmanager/mixins:ro
+      - &amEmail
+        /volume1/docker/mimir/email_token.txt:/var/run/secrets/email_token.txt:ro
+      - &amDiscord
+        /volume1/docker/mimir/discord_webhook.txt:/var/run/secrets/discord_webhook.txt:ro
+      - mimir-data-1:/data/mimir
+    restart: unless-stopped
+
+  mimir-2:
+    <<: *mimirConf
+    container_name: mimir-2
+    hostname: mimir-2
+    volumes:
+      - *config
+      - *runtime
+      - *amConf
+      - *amEmail
+      - *amDiscord
+      - mimir-data-2:/data/mimir
+  
+  mimir-3:
+    <<: *mimirConf
+    container_name: mimir-3
+    hostname: mimir-3
+    volumes:
+      - *config
+      - *runtime
+      - *amConf
+      - *amEmail
+      - *amDiscord
+      - mimir-data-3:/data/mimir
+
+volumes:
+  mimir-data-1:
+  mimir-data-2:
+  mimir-data-3:

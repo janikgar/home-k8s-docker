@@ -28,6 +28,11 @@ immich/postgres/
 
 loki/loki/**
 
+!mimir/data/.gitkeep
+mimir/data/**
+mimir/email_token.txt
+mimir/discord_webhook.txt
+
 minio/data/**
 minio/secret*
 

@@ -1,38 +1,38 @@
 services:
-  prometheus:
-    image: quay.io/prometheus/prometheus:v3.4.1
-    container_name: prometheus
-    ports:
-      - "30001:9090"
-    command:
-      - --config.file=/prom/prometheus.yaml
-      - --web.enable-lifecycle
-      - --storage.tsdb.min-block-duration=2h
-      - --storage.tsdb.max-block-duration=2h
-      - --enable-feature=promql-at-modifier
-      - --web.enable-admin-api
-    volumes:
-      - /volume1/docker/prometheus/prometheus.yaml:/prom/prometheus.yaml
-      - /volume1/docker/prometheus/prometheus_data:/prometheus/data
-      - /volume1/docker/prometheus/mixins:/prom/mixins
-      - /volume1/docker/prometheus/hass_token.txt:/var/run/secrets/hass_token.txt:ro
-      - /volume1/docker/prometheus/hass_token_2.txt:/var/run/secrets/hass_token_2.txt:ro
-      - /volume1/docker/prometheus/minio_token.txt:/var/run/secrets/minio_token.txt:ro
-    restart: always
-    healthcheck:
-      test: ["CMD-SHELL", "printf 'GET /-/healthy HTTP/1.1\r\nHost: localhost\r\n\r\n' | nc -w1 localhost 9090 | grep '200 OK'"]
-      interval: 1m
-      timeout: 10s
-      retries: 3
-      start_period: 2m
-    labels:
-      - "diun.enable=true"
-    deploy:
-      restart_policy:
-        condition: any
-      resources:
-        limits:
-          memory: 384M
+#  prometheus:
+#    image: quay.io/prometheus/prometheus:v3.4.1
+#    container_name: prometheus
+#    ports:
+#      - "30001:9090"
+#    command:
+#      - --config.file=/prom/prometheus.yaml
+#      - --web.enable-lifecycle
+#      - --storage.tsdb.min-block-duration=2h
+#      - --storage.tsdb.max-block-duration=2h
+#      - --enable-feature=promql-at-modifier
+#      - --web.enable-admin-api
+#    volumes:
+#      - /volume1/docker/prometheus/prometheus.yaml:/prom/prometheus.yaml
+#      - /volume1/docker/prometheus/prometheus_data:/prometheus/data
+#      - /volume1/docker/prometheus/mixins:/prom/mixins
+#      - /volume1/docker/prometheus/hass_token.txt:/var/run/secrets/hass_token.txt:ro
+#      - /volume1/docker/prometheus/hass_token_2.txt:/var/run/secrets/hass_token_2.txt:ro
+#      - /volume1/docker/prometheus/minio_token.txt:/var/run/secrets/minio_token.txt:ro
+#    restart: always
+#    healthcheck:
+#      test: ["CMD-SHELL", "printf 'GET /-/healthy HTTP/1.1\r\nHost: localhost\r\n\r\n' | nc -w1 localhost 9090 | grep '200 OK'"]
+#      interval: 1m
+#      timeout: 10s
+#      retries: 3
+#      start_period: 2m
+#    labels:
+#      - "diun.enable=true"
+#    deploy:
+#      restart_policy:
+#        condition: any
+#      resources:
+#        limits:
+#          memory: 384M
   alertmanager:
     image: quay.io/prometheus/alertmanager:v0.28.1
     container_name: alertmanager
@@ -58,66 +58,66 @@ services:
     deploy:
       restart_policy:
         condition: any
-  node_exporter:
-    image: quay.io/prometheus/node-exporter
-    container_name: node_exporter
-    command: --path.rootfs=/host
-    ports:
-      - "30091:9100"
-    volumes:
-      - "/:/host:ro"
-      - "/sys:/sys:ro"
-    restart: always
-    healthcheck:
-      test: ["CMD-SHELL", "printf 'GET /-/healthy HTTP/1.1\r\nHost: localhost\r\n\r\n' | nc -w1 localhost 9100 | grep '200 OK'"]
-      interval: 1m
-      timeout: 10s
-      retries: 3
-      start_period: 2m
-    labels:
-      - "diun.enable=true"
-    deploy:
-      restart_policy:
-        condition: any
-  blackbox_exporter:
-    container_name: blackbox_exporter
-    image: quay.io/prometheus/blackbox-exporter
-    command: --config.file=/config/blackbox.yaml
-    ports:
-      - "30095:9115"
-    volumes:
-      - /volume1/docker/prometheus/blackbox.yaml:/config/blackbox.yaml
-    cap_add:
-      - NET_ADMIN
-      - NET_RAW
-    restart: always
-    healthcheck:
-      test: ["CMD-SHELL", "printf 'GET /-/healthy HTTP/1.1\r\nHost: localhost\r\n\r\n' | nc -w1 localhost 9115 | grep '200 OK'"]
-      interval: 1m
-      timeout: 10s
-      retries: 3
-      start_period: 2m
-    labels:
-      - "diun.enable=true"
-  snmp_exporter:
-    container_name: snmp_exporter
-    command:
-      - --config.file=/etc/snmp_exporter/snmp.yml
-      - --config.expand-environment-variables
-    image: quay.io/prometheus/snmp-exporter
-    volumes:
-      - /volume1/docker/prometheus/snmp.yml:/etc/snmp_exporter/snmp.yml
-    ports:
-      - "30096:9116"
-    restart: always
-    healthcheck:
-      test: ["CMD-SHELL", "printf 'GET /-/healthy HTTP/1.1\r\nHost: localhost\r\n\r\n' | nc -w1 localhost 9116 | grep '200 OK'"]
-      interval: 1m
-      timeout: 10s
-      retries: 3
-      start_period: 2m
-    labels:
-      - "diun.enable=true"
+#  node_exporter:
+#    image: quay.io/prometheus/node-exporter
+#    container_name: node_exporter
+#    command: --path.rootfs=/host
+#    ports:
+#      - "30092:9100"
+#    volumes:
+#      - "/:/host:ro"
+#      - "/sys:/sys:ro"
+#    restart: always
+#    healthcheck:
+#      test: ["CMD-SHELL", "printf 'GET /-/healthy HTTP/1.1\r\nHost: localhost\r\n\r\n' | nc -w1 localhost 9100 | grep '200 OK'"]
+#      interval: 1m
+#      timeout: 10s
+#      retries: 3
+#      start_period: 2m
+#    labels:
+#      - "diun.enable=true"
+#    deploy:
+#      restart_policy:
+#        condition: any
+#  blackbox_exporter:
+#    container_name: blackbox_exporter
+#    image: quay.io/prometheus/blackbox-exporter
+#    command: --config.file=/config/blackbox.yaml
+#    ports:
+#      - "30095:9115"
+#    volumes:
+#      - /volume1/docker/prometheus/blackbox.yaml:/config/blackbox.yaml
+#    cap_add:
+#      - NET_ADMIN
+#      - NET_RAW
+#    restart: always
+#    healthcheck:
+#      test: ["CMD-SHELL", "printf 'GET /-/healthy HTTP/1.1\r\nHost: localhost\r\n\r\n' | nc -w1 localhost 9115 | grep '200 OK'"]
+#      interval: 1m
+#      timeout: 10s
+#      retries: 3
+#      start_period: 2m
+#    labels:
+#      - "diun.enable=true"
+#  snmp_exporter:
+#    container_name: snmp_exporter
+#    command:
+#      - --config.file=/etc/snmp_exporter/snmp.yml
+#      - --config.expand-environment-variables
+#    image: quay.io/prometheus/snmp-exporter
+#    volumes:
+#      - /volume1/docker/prometheus/snmp.yml:/etc/snmp_exporter/snmp.yml
+#    ports:
+#      - "30096:9116"
+#    restart: always
+#    healthcheck:
+#      test: ["CMD-SHELL", "printf 'GET /-/healthy HTTP/1.1\r\nHost: localhost\r\n\r\n' | nc -w1 localhost 9116 | grep '200 OK'"]
+#      interval: 1m
+#      timeout: 10s
+#      retries: 3
+#      start_period: 2m
+#    labels:
+#      - "diun.enable=true"
   #tempo:
   #  container_name: tempo
   #  image: grafana/tempo:latest
@@ -136,18 +136,18 @@ services:
   #  restart: on-failure
   #  labels:
   #    - "diun.enable=true"
-  cadvisor:
-    container_name: cadvisor
-    image: gcr.io/cadvisor/cadvisor:latest
-    restart: always
-    entrypoint:
-      - /usr/bin/cadvisor
-      - --logtostderr
-      - --store_container_labels=false
-    ports:
-      - "30080:8080"
-    volumes:
-      - /:/rootfs:ro
-      - /var/run:/var/run:rw
-      - /sys:/sys:ro
-      - /var/lib/docker:/var/lib/docker:ro
+#  cadvisor:
+#    container_name: cadvisor
+#    image: gcr.io/cadvisor/cadvisor:latest
+#    restart: always
+#    entrypoint:
+#      - /usr/bin/cadvisor
+#      - --logtostderr
+#      - --store_container_labels=false
+#    ports:
+#      - "30080:8080"
+#    volumes:
+#      - /:/rootfs:ro
+#      - /var/run:/var/run:rw
+#      - /sys:/sys:ro
+#      - /var/lib/docker:/var/lib/docker:ro
