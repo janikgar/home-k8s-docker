@@ -6,12 +6,9 @@ services:
     image: nginxinc/nginx-unprivileged:alpine@sha256:d9a05c0efb51a5fa268554b8e66e6b43d9c51c6fd7dac1997c1cebe2d8ef1cbb
     volumes:
       - /volume1/docker/mimir/nginx.conf:/etc/nginx/nginx.conf:ro
-    depends_on:
-      - mimir-1
-      - mimir-2
-      - mimir-3
     ports:
       - 30909:9009
+    restart: always
 
 
   mimir-1: &mimirConf
@@ -38,7 +35,7 @@ services:
       - &amDiscord
         /volume1/docker/mimir/discord_webhook.txt:/var/run/secrets/discord_webhook.txt:ro
       - mimir-data-1:/data/mimir
-    restart: unless-stopped
+    restart: always
 
   mimir-2:
     <<: *mimirConf
