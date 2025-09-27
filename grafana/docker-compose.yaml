@@ -19,20 +19,16 @@ services:
     healthcheck:
       test: ["CMD-SHELL", "curl -s -m 10 localhost:3000/api/health || exit 1"]
       interval: 1m
-      timeout: 10s
+      timeout: 5s
       retries: 5
       start_period: 5m
     labels: 
       - "diun.enable=true"
     depends_on:
       - grafana_db
-    deploy:
-      resources:
-        limits:
-          memory: 256M
   grafana_db:
     container_name: grafana_db
-    image: postgres:18.0@sha256:1d288494853e244e7a78d87b3526e650e5221c622f9768ecac9313d0874a9c39
+    image: postgres:17.6@sha256:cecd364cc7ec03ab6148ab650efc5200548a89fd2e4f47a8ba6e6cf08c18805d
     ports:
       - "30020:5432"
     restart: always

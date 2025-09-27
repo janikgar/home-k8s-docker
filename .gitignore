@@ -28,6 +28,9 @@ immich/postgres/
 
 loki/loki/**
 
+!tempo/tempo-data/.gitkeep
+tempo/tempo-data/**
+
 !mimir/data/.gitkeep
 mimir/data/**
 mimir/email_token.txt
