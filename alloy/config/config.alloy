@@ -208,6 +208,7 @@ discovery.relabel "k8s_node" {
 		regex         = ".*pods.*"
 		action        = "drop"
 	}
+
 }
 
 discovery.relabel "snmp_alloy" {
@@ -304,6 +305,12 @@ discovery.relabel "cadvisor" {
     target_label = "instance"
     replacement  = "192.168.1.28:30091"
   }
+
+  rule {
+    source_labels = ["id"]
+    action        = "drop"
+    regex         = ".docker.*"
+  }
 }
 
 discovery.relabel "syno_node" {
@@ -317,6 +324,12 @@ discovery.relabel "syno_node" {
   rule {
     target_label = "instance"
     replacement  = "192.168.1.28:30091"
+  }
+
+  rule {
+    source_labels = ["__name__"]
+    regex         = "go.*"
+    action        = "drop"
   }
 }
 
@@ -454,6 +467,11 @@ prometheus.relabel "router" {
 		regex         = "^\\/$|\\/\\-\\/(ready|reload)|\\/(graph|metrics|alerts|favicon.ico)"
 		action        = "drop"
 	}
+  rule {
+    source_labels = ["__name__"]
+    regex         = "go.*"
+    action        = "drop"
+  }
 }
 
 prometheus.relabel "syno_node" {
@@ -482,6 +500,11 @@ prometheus.relabel "syno_node" {
 		regex         = "^\\/$|\\/\\-\\/(ready|reload)|\\/(graph|metrics|alerts|favicon.ico)"
 		action        = "drop"
 	}
+  rule {
+    source_labels = ["__name__"]
+    regex         = "go.*"
+    action        = "drop"
+  }
 }
 
 prometheus.relabel "prometheus" {
@@ -510,6 +533,11 @@ prometheus.relabel "prometheus" {
 		regex         = "^\\/$|\\/\\-\\/(ready|reload)|\\/(graph|metrics|alerts|favicon.ico)"
 		action        = "drop"
 	}
+  rule {
+    source_labels = ["__name__"]
+    regex         = "go.*"
+    action        = "drop"
+  }
 }
 
 prometheus.relabel "k8s_node" {
@@ -538,6 +566,11 @@ prometheus.relabel "k8s_node" {
 		regex         = "^\\/$|\\/\\-\\/(ready|reload)|\\/(graph|metrics|alerts|favicon.ico)"
 		action        = "drop"
 	}
+  rule {
+    source_labels = ["__name__"]
+    regex         = "go.*"
+    action        = "drop"
+  }
 }
 
 prometheus.relabel "hass" {
@@ -553,6 +586,11 @@ prometheus.relabel "hass" {
 		regex  = "friendly_name"
 		action = "labeldrop"
 	}
+  rule {
+    source_labels = ["__name__"]
+    regex         = "go.*"
+    action        = "drop"
+  }
 }
 
 prometheus.relabel "snmp" {
@@ -568,6 +606,11 @@ prometheus.relabel "snmp" {
 		regex  = "ifIndex"
 		action = "labeldrop"
 	}
+  rule {
+    source_labels = ["__name__"]
+    regex         = "go.*"
+    action        = "drop"
+  }
 }
 
 prometheus.relabel "cadvisor" {
@@ -576,6 +619,12 @@ prometheus.relabel "cadvisor" {
   rule {
     regex = "image|boot_id|system_uuid|machine_id"
     action = "labeldrop"
+  }
+
+  rule {
+    source_labels = ["id"]
+    regex         = "/docker.*"
+    action        = "drop"
   }
 }
 
@@ -587,6 +636,11 @@ prometheus.relabel "dockerd" {
 		regex         = "swarm.*|etcd.*|builder.*"
 		action        = "drop"
 	}
+  rule {
+    source_labels = ["__name__"]
+    regex         = "go.*"
+    action        = "drop"
+  }
 }
 
 // OTEL Collector
