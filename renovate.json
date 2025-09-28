@@ -12,5 +12,12 @@
       "username": "janikgar",
       "password": "{{ secrets.QUAY_TOKEN }}"
     }
+  ],
+  "packageRules": [
+    {
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["postgres"],
+      "versioning": "semver-coerced"
+    }
   ]
 }
