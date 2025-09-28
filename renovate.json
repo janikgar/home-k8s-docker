@@ -5,5 +5,12 @@
   ],
   "schedule": [
     "* * * * 5"
+  ],
+  "hostRules": [
+    {
+      "matchHost": "quay.io",
+      "username": "janikgar",
+      "password": "{{ secrets.QUAY_TOKEN }}"
+    }
   ]
 }
