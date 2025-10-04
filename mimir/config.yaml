@@ -50,6 +50,9 @@ limits:
   compactor_blocks_retention_period: 1y
   compactor_block_upload_enabled: true
   native_histograms_ingestion_enabled: true
+  active_series_custom_trackers:
+    main: '{prometheus="prom_main"}'
 
 runtime_config:
   file: /etc/runtime.yaml
+

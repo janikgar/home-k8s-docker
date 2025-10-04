@@ -142,15 +142,15 @@ prometheus.exporter.blackbox "remote_dns" {
   config_file = "/etc/alloy/blackbox.yaml"
 
   target {
-    name = "remote_dns"
+    name    = "remote_dns"
     address = "192.168.1.1"
-    module = "remote_dns"
+    module  = "remote_dns"
   }
 
   target {
-    name = "remote_dns"
+    name    = "remote_dns"
     address = "192.168.1.3"
-    module = "remote_dns"
+    module  = "remote_dns"
   }
 }
 
@@ -158,20 +158,21 @@ prometheus.exporter.blackbox "local_dns" {
   config_file = "/etc/alloy/blackbox.yaml"
 
   target {
-    name = "local_dns"
+    name    = "local_dns"
     address = "192.168.1.1"
-    module = "local_dns"
+    module  = "local_dns"
   }
 
   target {
-    name = "local_dns"
+    name    = "local_dns"
     address = "192.168.1.3"
-    module = "local_dns"
+    module  = "local_dns"
   }
 }
 
 prometheus.exporter.cadvisor "cadvisor" {
   store_container_labels = false
+  docker_only            = true
 }
 
 prometheus.exporter.unix "syno_node" {
@@ -309,7 +310,7 @@ discovery.relabel "cadvisor" {
   rule {
     source_labels = ["id"]
     action        = "drop"
-    regex         = ".docker.*"
+    regex         = ".(docker|system).*"
   }
 }
 
@@ -436,6 +437,16 @@ prometheus.scrape "dockerd" {
 	forward_to      = [prometheus.relabel.dockerd.receiver]
 	job_name        = "dockerd"
 	scrape_interval = "15s"
+}
+
+prometheus.scrape "mimir" {
+  targets = [{
+    __address__ = "192.168.1.28:30909",
+  }]
+
+  forward_to      = [prometheus.relabel.mimir.receiver]
+  job_name        = "mimir"
+  scrape_interval = "30s"
 }
 
 // Metric relabelers
@@ -623,7 +634,7 @@ prometheus.relabel "cadvisor" {
 
   rule {
     source_labels = ["id"]
-    regex         = "/docker.*"
+    regex         = "/(docker|system).*"
     action        = "drop"
   }
 }
@@ -640,6 +651,16 @@ prometheus.relabel "dockerd" {
     source_labels = ["__name__"]
     regex         = "go.*"
     action        = "drop"
+  }
+}
+
+prometheus.relabel "mimir" {
+	forward_to = [prometheus.remote_write.default.receiver]
+
+  rule {
+    source_labels = ["__name__"]
+    regex         = "cortex_ingester_active_series"
+    action        = "keep"
   }
 }
 
