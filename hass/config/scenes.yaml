@@ -68,7 +68,7 @@
       min_mireds: 153
       max_mireds: 500
       effect_list:
-      - None
+      - 'off'
       - candle
       - fire
       - prism
@@ -78,21 +78,21 @@
       supported_color_modes:
       - color_temp
       - xy
-      effect: None
+      effect: 'off'
       color_mode: color_temp
-      brightness: 84
-      color_temp_kelvin: 3164
-      color_temp: 316
+      brightness: 41
+      color_temp_kelvin: 3521
+      color_temp: 284
       hs_color:
-      - 27.575
-      - 52.614
+      - 27.152
+      - 44.32
       rgb_color:
       - 255
-      - 182
-      - 120
+      - 193
+      - 142
       xy_color:
-      - 0.482
-      - 0.38
+      - 0.452
+      - 0.373
       mode: normal
       dynamics: none
       friendly_name: Light Strip
@@ -100,13 +100,13 @@
       state: 'on'
     light.right_ent_center:
       effect_list:
-      - None
+      - 'off'
       - candle
       supported_color_modes:
       - brightness
-      effect: None
+      effect: 'off'
       color_mode: brightness
-      brightness: 71
+      brightness: 13
       mode: normal
       dynamics: none
       friendly_name: Right Ent Center
@@ -114,19 +114,159 @@
       state: 'on'
     light.left_ent_center:
       effect_list:
-      - None
+      - 'off'
       - candle
       supported_color_modes:
       - brightness
-      effect: None
+      effect: 'off'
       color_mode: brightness
-      brightness: 76
+      brightness: 33
       mode: normal
       dynamics: none
       friendly_name: Left Ent Center
       supported_features: 44
       state: 'on'
-  icon: mdi:brightness-4
+    light.hue_color_downlight_1:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6535
+      min_mireds: 153
+      max_mireds: 500
+      effect_list:
+      - 'off'
+      - candle
+      - fire
+      - prism
+      - sparkle
+      - opal
+      - glisten
+      - underwater
+      - cosmos
+      - sunbeam
+      - enchant
+      - sunrise
+      - sunset
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode:
+      brightness:
+      color_temp_kelvin:
+      color_temp:
+      hs_color:
+      rgb_color:
+      xy_color:
+      mode: normal
+      dynamics: none
+      friendly_name: Hue color downlight 1
+      supported_features: 44
+      state: 'off'
+    light.hue_color_downlight_2:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6535
+      min_mireds: 153
+      max_mireds: 500
+      effect_list:
+      - 'off'
+      - candle
+      - fire
+      - prism
+      - sparkle
+      - opal
+      - glisten
+      - underwater
+      - cosmos
+      - sunbeam
+      - enchant
+      - sunrise
+      - sunset
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode:
+      brightness:
+      color_temp_kelvin:
+      color_temp:
+      hs_color:
+      rgb_color:
+      xy_color:
+      mode: normal
+      dynamics: none
+      friendly_name: Hue color downlight 2
+      supported_features: 44
+      state: 'off'
+    light.hue_color_downlight_3:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6535
+      min_mireds: 153
+      max_mireds: 500
+      effect_list:
+      - 'off'
+      - candle
+      - fire
+      - prism
+      - sparkle
+      - opal
+      - glisten
+      - underwater
+      - cosmos
+      - sunbeam
+      - enchant
+      - sunrise
+      - sunset
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode:
+      brightness:
+      color_temp_kelvin:
+      color_temp:
+      hs_color:
+      rgb_color:
+      xy_color:
+      mode: normal
+      dynamics: none
+      friendly_name: Hue color downlight 3
+      supported_features: 44
+      state: 'off'
+    light.hue_color_downlight_4:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6535
+      min_mireds: 153
+      max_mireds: 500
+      effect_list:
+      - 'off'
+      - candle
+      - fire
+      - prism
+      - sparkle
+      - opal
+      - glisten
+      - underwater
+      - cosmos
+      - sunbeam
+      - enchant
+      - sunrise
+      - sunset
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode:
+      brightness:
+      color_temp_kelvin:
+      color_temp:
+      hs_color:
+      rgb_color:
+      xy_color:
+      mode: normal
+      dynamics: none
+      friendly_name: Hue color downlight 4
+      supported_features: 44
+      state: 'off'
+  icon: mdi:movie-roll
   metadata: {}
 - id: '1607246268954'
   name: Night Bedstand
@@ -313,23 +453,204 @@
   name: Living Room Off
   entities:
     light.left_ent_center:
+      effect_list:
+      - 'off'
+      - candle
+      supported_color_modes:
+      - brightness
+      effect:
+      color_mode:
+      brightness:
+      mode: normal
+      dynamics: none
       friendly_name: Left Ent Center
-      supported_features: 41
+      supported_features: 44
       state: 'off'
     light.right_ent_center:
+      effect_list:
+      - 'off'
+      - candle
+      supported_color_modes:
+      - brightness
+      effect:
+      color_mode:
+      brightness:
+      mode: normal
+      dynamics: none
       friendly_name: Right Ent Center
-      supported_features: 41
+      supported_features: 44
       state: 'off'
     light.light_strip:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6535
       min_mireds: 153
       max_mireds: 500
       effect_list:
-      - colorloop
-      - random
+      - 'off'
+      - candle
+      - fire
+      - prism
+      - sparkle
+      - opal
+      - glisten
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode:
+      brightness:
+      color_temp_kelvin:
+      color_temp:
+      hs_color:
+      rgb_color:
+      xy_color:
+      mode: normal
+      dynamics: none
       friendly_name: Light Strip
-      supported_features: 63
+      supported_features: 44
+      state: 'off'
+    light.hue_color_downlight_1:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6535
+      min_mireds: 153
+      max_mireds: 500
+      effect_list:
+      - 'off'
+      - candle
+      - fire
+      - prism
+      - sparkle
+      - opal
+      - glisten
+      - underwater
+      - cosmos
+      - sunbeam
+      - enchant
+      - sunrise
+      - sunset
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode:
+      brightness:
+      color_temp_kelvin:
+      color_temp:
+      hs_color:
+      rgb_color:
+      xy_color:
+      mode: normal
+      dynamics: none
+      friendly_name: Hue color downlight 1
+      supported_features: 44
+      state: 'off'
+    light.hue_color_downlight_2:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6535
+      min_mireds: 153
+      max_mireds: 500
+      effect_list:
+      - 'off'
+      - candle
+      - fire
+      - prism
+      - sparkle
+      - opal
+      - glisten
+      - underwater
+      - cosmos
+      - sunbeam
+      - enchant
+      - sunrise
+      - sunset
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode:
+      brightness:
+      color_temp_kelvin:
+      color_temp:
+      hs_color:
+      rgb_color:
+      xy_color:
+      mode: normal
+      dynamics: none
+      friendly_name: Hue color downlight 2
+      supported_features: 44
+      state: 'off'
+    light.hue_color_downlight_3:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6535
+      min_mireds: 153
+      max_mireds: 500
+      effect_list:
+      - 'off'
+      - candle
+      - fire
+      - prism
+      - sparkle
+      - opal
+      - glisten
+      - underwater
+      - cosmos
+      - sunbeam
+      - enchant
+      - sunrise
+      - sunset
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode:
+      brightness:
+      color_temp_kelvin:
+      color_temp:
+      hs_color:
+      rgb_color:
+      xy_color:
+      mode: normal
+      dynamics: none
+      friendly_name: Hue color downlight 3
+      supported_features: 44
+      state: 'off'
+    light.hue_color_downlight_4:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6535
+      min_mireds: 153
+      max_mireds: 500
+      effect_list:
+      - 'off'
+      - candle
+      - fire
+      - prism
+      - sparkle
+      - opal
+      - glisten
+      - underwater
+      - cosmos
+      - sunbeam
+      - enchant
+      - sunrise
+      - sunset
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode:
+      brightness:
+      color_temp_kelvin:
+      color_temp:
+      hs_color:
+      rgb_color:
+      xy_color:
+      mode: normal
+      dynamics: none
+      friendly_name: Hue color downlight 4
+      supported_features: 44
       state: 'off'
   icon: mdi:home-lightbulb-outline
+  metadata: {}
 - id: '1737278663785'
   name: MBR Off
   entities: {}
