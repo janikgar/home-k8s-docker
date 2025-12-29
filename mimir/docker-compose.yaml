@@ -3,7 +3,7 @@ version: '3.8'
 services:
   nginx:
     container_name: mimir-lb
-    image: nginxinc/nginx-unprivileged:alpine@sha256:11cab1801e5b195e6e6aab60b4dce008081bb096ab919233b75265b6b3d8ea47
+    image: nginxinc/nginx-unprivileged:alpine@sha256:c3b9dd893f9ecd7046d3ac37b0dc218ff3c65fe53acd5cb5e1f97f3988272760
     volumes:
       - /volume1/docker/mimir/nginx.conf:/etc/nginx/nginx.conf:ro
     ports:
