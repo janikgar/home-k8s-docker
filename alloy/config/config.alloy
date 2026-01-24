@@ -343,7 +343,7 @@ prometheus.scrape "router" {
 	}]
 	forward_to      = [prometheus.relabel.router.receiver]
 	job_name        = "router"
-	scrape_interval = "15s"
+	scrape_interval = "30s"
 }
 
 prometheus.scrape "syno_node" {
@@ -359,14 +359,14 @@ prometheus.scrape "prometheus" {
 	}]
 	forward_to      = [prometheus.relabel.prometheus.receiver]
 	job_name        = "prometheus"
-	scrape_interval = "15s"
+	scrape_interval = "30s"
 }
 
 prometheus.scrape "k8s_node" {
 	targets         = discovery.relabel.k8s_node.output
 	forward_to      = [prometheus.relabel.k8s_node.receiver]
 	job_name        = "k8s_node"
-	scrape_interval = "15s"
+	scrape_interval = "30s"
 }
 
 prometheus.scrape "hass" {
@@ -386,25 +386,25 @@ prometheus.scrape "hass" {
 prometheus.scrape "snmp" {
 	targets    = discovery.relabel.snmp_alloy.output
 	forward_to = [prometheus.relabel.snmp.receiver]
-	scrape_interval = "15s"
+	scrape_interval = "30s"
 }
 
 prometheus.scrape "http_ping_alloy" {
   targets = discovery.relabel.http_ping_alloy.output
   forward_to = [prometheus.remote_write.default.receiver]
-	scrape_interval = "15s"
+	scrape_interval = "30s"
 }
 
 prometheus.scrape "remote_dns_alloy" {
   targets = discovery.relabel.remote_dns_alloy.output
   forward_to = [prometheus.remote_write.default.receiver]
-	scrape_interval = "15s"
+	scrape_interval = "30s"
 }
 
 prometheus.scrape "local_dns_alloy" {
   targets = discovery.relabel.local_dns_alloy.output
   forward_to = [prometheus.remote_write.default.receiver]
-	scrape_interval = "15s"
+	scrape_interval = "30s"
 }
 
 prometheus.scrape "fail2ban" {
@@ -413,14 +413,14 @@ prometheus.scrape "fail2ban" {
 	}]
 	forward_to      = [prometheus.remote_write.default.receiver]
 	job_name        = "fail2ban"
-	scrape_interval = "15s"
+	scrape_interval = "30s"
 }
 
 prometheus.scrape "loki" {
 	targets         = discovery.relabel.loki.output
 	forward_to      = [prometheus.remote_write.default.receiver]
 	job_name        = "loki"
-	scrape_interval = "15s"
+	scrape_interval = "30s"
 }
 
 prometheus.scrape "cadvisor" {
@@ -436,7 +436,7 @@ prometheus.scrape "dockerd" {
 	}]
 	forward_to      = [prometheus.relabel.dockerd.receiver]
 	job_name        = "dockerd"
-	scrape_interval = "15s"
+	scrape_interval = "30s"
 }
 
 prometheus.scrape "mimir" {
