@@ -9,7 +9,7 @@ route:
 receivers:
   #- name: 'discord'
   #  discord_configs:
-  #    - webhook_url_file: /var/run/secrets/discord_webhook.txt
+  #    - webhook_url: ${DISCORD_SECRET}
   - name: 'ntfy'
     webhook_configs:
       - url: https://ntfy.home.lan/alertmanager
@@ -20,4 +20,4 @@ receivers:
         from: janikgar@gmail.com
         smarthost: smtp.gmail.com:587
         auth_username: janikgar@gmail.com
-        auth_password_file: /var/run/secrets/email_token.txt
+        auth_password: ${EMAIL_SECRET}
