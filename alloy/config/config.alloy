@@ -101,17 +101,17 @@ prometheus.exporter.snmp "snmp" {
     },
     {
       "name"    = "picluster-01",
-      "address" = "192.168.1.101",
+      "address" = "192.168.1.80",
       "module"  = "if_mib",
     },
     {
       "name"    = "picluster-02",
-      "address" = "192.168.1.102",
+      "address" = "192.168.1.199",
       "module"  = "if_mib",
     },
     {
       "name"    = "picluster-03",
-      "address" = "192.168.1.103",
+      "address" = "192.168.1.250",
       "module"  = "if_mib",
     },
     {
@@ -185,13 +185,13 @@ prometheus.exporter.unix "syno_node" {
 discovery.relabel "k8s_node" {
 	targets = array.concat(
 		[{
-			__address__ = "192.168.1.101:9100",
+			__address__ = "192.168.1.80:9100",
 		}],
 		[{
-			__address__ = "192.168.1.102:9100",
+			__address__ = "192.168.1.199:9100",
 		}],
 		[{
-			__address__ = "192.168.1.103:9100",
+			__address__ = "192.168.1.250:9100",
 		}],
 		[{
 			__address__ = "192.168.1.117:9100",
