@@ -116,7 +116,7 @@ prometheus.exporter.snmp "snmp" {
     },
     {
       "name"    = "picluster-04",
-      "address" = "192.168.1.117",
+      "address" = "192.168.1.118",
       "module"  = "if_mib",
     },
   ]
@@ -194,7 +194,7 @@ discovery.relabel "k8s_node" {
 			__address__ = "192.168.1.250:9100",
 		}],
 		[{
-			__address__ = "192.168.1.117:9100",
+			__address__ = "192.168.1.118:9100",
 		}],
 	)
 
