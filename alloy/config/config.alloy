@@ -337,6 +337,17 @@ discovery.relabel "syno_node" {
 // Metric scrapers
 // ========================================
 
+
+prometheus.scrape "minio" {
+  targets = [{
+    __address__ = "192.168.1.28:30900",
+  }]
+  forward_to      = [prometheus.remote_write.default.receiver]
+  job_name        = "minio-job"
+  metrics_path    = "/minio/v2/metrics/cluster"
+  scrape_interval = "60s"
+}
+
 prometheus.scrape "router" {
 	targets = [{
 		__address__ = "192.168.1.1:9100",
