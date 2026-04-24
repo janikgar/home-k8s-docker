@@ -1,7 +1,7 @@
 services:
   hass:
     container_name: home_assistant
-    image: "ghcr.io/home-assistant/home-assistant:2026.4.2@sha256:4c940155cfd5b0187a6faee2db5d52b98bb573edc1aeee95d0818bb17b6534d7"
+    image: "ghcr.io/home-assistant/home-assistant:2026.4.4@sha256:c1e5f0147f4cb51ccb05bb30b62a1269cc1bd48a6274792d3b38a77ab274dfd2"
     volumes:
       - /volume1/docker/hass/config:/config
       #- /usr/share/zoneinfo/America/Chicago:/etc/localtime:ro
