@@ -22,11 +22,10 @@ echo ""
 # Find all directories modified in the last week, excluding common directories we don't want to process
 # -mindepth 1: Exclude the search directory itself if searching from a directory
 # -name '.git' -prune -o -name '.gitignore' -prune: Skip .git and .gitignore directories
-find "$SEARCH_DIR" -mindepth 1 -type d -name ".git" -prune -o \
-    -type d -name ".gitignore" -prune -o \
-    -type d -newermt "-$FIND_DAYS.days" ! -path "*/\.*" 2>/dev/null | \
+find /volume1/docker -maxdepth 2 -name docker-compose.yaml -newermt "-$FIND_DAYS days" | \
 sort | \
-while IFS= read -r dir; do
+while IFS= read -r filename; do
+    dir="$(dirname $filename)"
     echo "Processing: $dir"
     echo "---"
     
