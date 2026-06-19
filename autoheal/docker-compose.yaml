@@ -1,7 +1,7 @@
 services:
   autoheal:
     container_name: autoheal
-    image: willfarrell/autoheal:latest@sha256:d9a7db2f75142e7e169ec34fca536e645fb3361e5fd0f1d945ad99ad31d12d95
+    image: willfarrell/autoheal:latest@sha256:de2c9557c15dc86fa44f73d7371c2de2feb595b2fcec0edd6949148c74111cc0
     environment:
       AUTOHEAL_CONTAINER_LABEL: all
     volumes:
