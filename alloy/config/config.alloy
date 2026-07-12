@@ -12,7 +12,7 @@ loki.source.syslog "syslog" {
 		}
 		max_message_length = 0
 	}
-	forward_to    = [loki.write.default.receiver]
+	forward_to    = [loki.write.grafana_cloud_loki.receiver]
 	relabel_rules = null
 }
 
@@ -25,7 +25,7 @@ local.file_match "docker" {
 }
 
 loki.process "docker" {
-	forward_to = [loki.write.default.receiver]
+	forward_to = [loki.write.grafana_cloud_loki.receiver]
 
 	stage.json {
 		expressions = {
@@ -66,15 +66,20 @@ local.file_match "system" {
 
 loki.source.file "system" {
 	targets               = local.file_match.system.targets
-	forward_to            = [loki.write.default.receiver]
+	forward_to            = [loki.write.grafana_cloud_loki.receiver]
 	legacy_positions_file = "/tmp/positions.yaml"
 }
 
-loki.write "default" {
+loki.write "grafana_cloud_loki" {
 	endpoint {
-		url = "http://192.168.1.28:30002/loki/api/v1/push"
+		url = "https://logs-prod-021.grafana.net/loki/api/v1/push"
+
+		basic_auth {
+			username = "1678269"
+			password = sys.env("GCLOUD_RW_API_KEY")
+		}
 	}
-	external_labels = {}
+  external_labels = {}
 }
 
 
@@ -342,7 +347,7 @@ prometheus.scrape "minio" {
   targets = [{
     __address__ = "192.168.1.28:30900",
   }]
-  forward_to      = [prometheus.remote_write.default.receiver]
+  forward_to      = [prometheus.remote_write.cloud.receiver]
   job_name        = "minio-job"
   metrics_path    = "/minio/v2/metrics/cluster"
   scrape_interval = "60s"
@@ -402,19 +407,19 @@ prometheus.scrape "snmp" {
 
 prometheus.scrape "http_ping_alloy" {
   targets = discovery.relabel.http_ping_alloy.output
-  forward_to = [prometheus.remote_write.default.receiver]
+  forward_to = [prometheus.remote_write.cloud.receiver]
 	scrape_interval = "30s"
 }
 
 prometheus.scrape "remote_dns_alloy" {
   targets = discovery.relabel.remote_dns_alloy.output
-  forward_to = [prometheus.remote_write.default.receiver]
+  forward_to = [prometheus.remote_write.cloud.receiver]
 	scrape_interval = "30s"
 }
 
 prometheus.scrape "local_dns_alloy" {
   targets = discovery.relabel.local_dns_alloy.output
-  forward_to = [prometheus.remote_write.default.receiver]
+  forward_to = [prometheus.remote_write.cloud.receiver]
 	scrape_interval = "30s"
 }
 
@@ -422,14 +427,14 @@ prometheus.scrape "fail2ban" {
 	targets = [{
 		__address__ = "192.168.1.28:9191",
 	}]
-	forward_to      = [prometheus.remote_write.default.receiver]
+	forward_to      = [prometheus.remote_write.cloud.receiver]
 	job_name        = "fail2ban"
 	scrape_interval = "30s"
 }
 
 prometheus.scrape "loki" {
 	targets         = discovery.relabel.loki.output
-	forward_to      = [prometheus.remote_write.default.receiver]
+	forward_to      = [prometheus.remote_write.cloud.receiver]
 	job_name        = "loki"
 	scrape_interval = "30s"
 }
@@ -464,7 +469,7 @@ prometheus.scrape "mimir" {
 // ========================================
 
 prometheus.relabel "router" {
-	forward_to = [prometheus.remote_write.default.receiver]
+	forward_to = [prometheus.remote_write.cloud.receiver]
 
 	rule {
 		source_labels = ["__name__"]
@@ -497,7 +502,7 @@ prometheus.relabel "router" {
 }
 
 prometheus.relabel "syno_node" {
-	forward_to = [prometheus.remote_write.default.receiver]
+	forward_to = [prometheus.remote_write.cloud.receiver]
 
 	rule {
 		source_labels = ["__name__"]
@@ -530,7 +535,7 @@ prometheus.relabel "syno_node" {
 }
 
 prometheus.relabel "prometheus" {
-	forward_to = [prometheus.remote_write.default.receiver]
+	forward_to = [prometheus.remote_write.cloud.receiver]
 
 	rule {
 		source_labels = ["__name__"]
@@ -563,7 +568,7 @@ prometheus.relabel "prometheus" {
 }
 
 prometheus.relabel "k8s_node" {
-	forward_to = [prometheus.remote_write.default.receiver]
+	forward_to = [prometheus.remote_write.cloud.receiver]
 
 	rule {
 		source_labels = ["__name__"]
@@ -596,7 +601,7 @@ prometheus.relabel "k8s_node" {
 }
 
 prometheus.relabel "hass" {
-	forward_to = [prometheus.remote_write.default.receiver]
+	forward_to = [prometheus.remote_write.cloud.receiver]
 
 	rule {
 		source_labels = ["__name__"]
@@ -616,7 +621,7 @@ prometheus.relabel "hass" {
 }
 
 prometheus.relabel "snmp" {
-	forward_to = [prometheus.remote_write.default.receiver]
+	forward_to = [prometheus.remote_write.cloud.receiver]
 
 	rule {
 		source_labels = ["ifName"]
@@ -636,7 +641,7 @@ prometheus.relabel "snmp" {
 }
 
 prometheus.relabel "cadvisor" {
-	forward_to = [prometheus.remote_write.default.receiver]
+	forward_to = [prometheus.remote_write.cloud.receiver]
 
   rule {
     regex = "image|boot_id|system_uuid|machine_id"
@@ -651,7 +656,7 @@ prometheus.relabel "cadvisor" {
 }
 
 prometheus.relabel "dockerd" {
-	forward_to = [prometheus.remote_write.default.receiver]
+	forward_to = [prometheus.remote_write.cloud.receiver]
 
 	rule {
 		source_labels = ["__name__"]
@@ -666,7 +671,7 @@ prometheus.relabel "dockerd" {
 }
 
 prometheus.relabel "mimir" {
-	forward_to = [prometheus.remote_write.default.receiver]
+	forward_to = [prometheus.remote_write.cloud.receiver]
 
   rule {
     source_labels = ["__name__"]
@@ -722,6 +727,17 @@ prometheus.remote_write "default" {
 		queue_config { }
 
 		metadata_config { }
+	}
+}
+
+prometheus.remote_write "cloud" {
+	endpoint {
+		url = "https://prometheus-prod-67-prod-us-west-0.grafana.net/api/prom/push"
+
+		basic_auth {
+			username = "3365188"
+			password = sys.env("GCLOUD_RW_API_KEY")
+		}
 	}
 }
 

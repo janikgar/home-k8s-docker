@@ -4,6 +4,7 @@ services:
   alloy:
     image: grafana/alloy:latest
     container_name: alloy
+    env_file: .env
     command:
       - run
       - /etc/alloy/config.alloy
