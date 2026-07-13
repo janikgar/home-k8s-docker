@@ -2,83 +2,83 @@
 // ========================================
 
 loki.source.syslog "syslog" {
-	listener {
-		address               = "0.0.0.0:1514"
-		protocol              = "udp"
-		idle_timeout          = "1m0s"
-		label_structured_data = true
-		labels                = {
-			job = "syslog",
-		}
-		max_message_length = 0
-	}
-	forward_to    = [loki.write.grafana_cloud_loki.receiver]
-	relabel_rules = null
+  listener {
+    address               = "0.0.0.0:1514"
+    protocol              = "udp"
+    idle_timeout          = "1m0s"
+    label_structured_data = true
+    labels                = {
+      job = "syslog",
+    }
+    max_message_length = 0
+  }
+  forward_to    = [loki.write.grafana_cloud_loki.receiver]
+  relabel_rules = null
 }
 
 local.file_match "docker" {
-	path_targets = [{
-		__address__ = "localhost",
-		__path__    = "/var/docker/**/*log",
-		job         = "docker",
-	}]
+  path_targets = [{
+    __address__ = "localhost",
+    __path__    = "/var/docker/**/*log",
+    job         = "docker",
+  }]
 }
 
 loki.process "docker" {
-	forward_to = [loki.write.grafana_cloud_loki.receiver]
+  forward_to = [loki.write.grafana_cloud_loki.receiver]
 
-	stage.json {
-		expressions = {
-			container = "attrs.tag",
-		}
-	}
+  stage.json {
+    expressions = {
+      container = "attrs.tag",
+    }
+  }
 
-	stage.labels {
-		values = {
-			container = null,
-			stream    = null,
-		}
-	}
+  stage.labels {
+    values = {
+      container = null,
+      stream    = null,
+    }
+  }
 
-	stage.timestamp {
-		source = "timestamp"
-		format = "RFC3339Nano"
-	}
+  stage.timestamp {
+    source = "timestamp"
+    format = "RFC3339Nano"
+  }
 
-	stage.output {
-		source = "output"
-	}
+  stage.output {
+    source = "output"
+  }
 }
 
 loki.source.file "docker" {
-	targets               = local.file_match.docker.targets
-	forward_to            = [loki.process.docker.receiver]
-	legacy_positions_file = "/tmp/positions.yaml"
+  targets               = local.file_match.docker.targets
+  forward_to            = [loki.process.docker.receiver]
+  legacy_positions_file = "/tmp/positions.yaml"
 }
 
 local.file_match "system" {
-	path_targets = [{
-		__address__ = "localhost",
-		__path__    = "/var/log/**/*log",
-		job         = "varstarlogs",
-	}]
+  path_targets = [{
+    __address__ = "localhost",
+    __path__    = "/var/log/**/*log",
+    job         = "varstarlogs",
+  }]
 }
 
 loki.source.file "system" {
-	targets               = local.file_match.system.targets
-	forward_to            = [loki.write.grafana_cloud_loki.receiver]
-	legacy_positions_file = "/tmp/positions.yaml"
+  targets               = local.file_match.system.targets
+  forward_to            = [loki.write.grafana_cloud_loki.receiver]
+  legacy_positions_file = "/tmp/positions.yaml"
 }
 
 loki.write "grafana_cloud_loki" {
-	endpoint {
-		url = "https://logs-prod-021.grafana.net/loki/api/v1/push"
+  endpoint {
+    url = "https://logs-prod-021.grafana.net/loki/api/v1/push"
 
-		basic_auth {
-			username = "1678269"
-			password = sys.env("GCLOUD_RW_API_KEY")
-		}
-	}
+    basic_auth {
+      username = "1678269"
+      password = sys.env("GCLOUD_RW_API_KEY")
+    }
+  }
   external_labels = {}
 }
 
@@ -188,32 +188,32 @@ prometheus.exporter.unix "syno_node" {
 // ========================================
 
 discovery.relabel "k8s_node" {
-	targets = array.concat(
-		[{
-			__address__ = "192.168.1.80:9100",
-		}],
-		[{
-			__address__ = "192.168.1.199:9100",
-		}],
-		[{
-			__address__ = "192.168.1.250:9100",
-		}],
-		[{
-			__address__ = "192.168.1.118:9100",
-		}],
-	)
+  targets = array.concat(
+    [{
+      __address__ = "192.168.1.80:9100",
+    }],
+    [{
+      __address__ = "192.168.1.199:9100",
+    }],
+    [{
+      __address__ = "192.168.1.250:9100",
+    }],
+    [{
+      __address__ = "192.168.1.118:9100",
+    }],
+  )
 
-	rule {
-		source_labels = ["fstype"]
-		regex         = "nfs|tmpfs"
-		action        = "drop"
-	}
+  rule {
+    source_labels = ["fstype"]
+    regex         = "nfs|tmpfs"
+    action        = "drop"
+  }
 
-	rule {
-		source_labels = ["exported_mountpoint"]
-		regex         = ".*pods.*"
-		action        = "drop"
-	}
+  rule {
+    source_labels = ["exported_mountpoint"]
+    regex         = ".*pods.*"
+    action        = "drop"
+  }
 
 }
 
@@ -226,10 +226,10 @@ discovery.relabel "snmp_alloy" {
     regex         = "lxc.*"
   }
 
-	rule {
-		source_labels = ["__param_target"]
-		target_label  = "instance"
-	}
+  rule {
+    source_labels = ["__param_target"]
+    target_label  = "instance"
+  }
 
   rule {
     target_label = "job"
@@ -241,10 +241,10 @@ discovery.relabel "snmp_alloy" {
 discovery.relabel "http_ping_alloy" {
   targets = prometheus.exporter.blackbox.http_ping.targets
 
-	rule {
-		source_labels = ["__param_target"]
-		target_label  = "instance"
-	}
+  rule {
+    source_labels = ["__param_target"]
+    target_label  = "instance"
+  }
 
   rule {
     target_label = "job"
@@ -256,10 +256,10 @@ discovery.relabel "http_ping_alloy" {
 discovery.relabel "remote_dns_alloy" {
   targets = prometheus.exporter.blackbox.remote_dns.targets
 
-	rule {
-		source_labels = ["__param_target"]
-		target_label  = "instance"
-	}
+  rule {
+    source_labels = ["__param_target"]
+    target_label  = "instance"
+  }
 
   rule {
     target_label = "job"
@@ -271,10 +271,10 @@ discovery.relabel "remote_dns_alloy" {
 discovery.relabel "local_dns_alloy" {
   targets = prometheus.exporter.blackbox.local_dns.targets
 
-	rule {
-		source_labels = ["__param_target"]
-		target_label  = "instance"
-	}
+  rule {
+    source_labels = ["__param_target"]
+    target_label  = "instance"
+  }
 
   rule {
     target_label = "job"
@@ -284,19 +284,19 @@ discovery.relabel "local_dns_alloy" {
 }
 
 discovery.relabel "loki" {
-	targets = [{
-		__address__ = "192.168.1.28:30002",
-	}]
+  targets = [{
+    __address__ = "192.168.1.28:30002",
+  }]
 
-	rule {
-		target_label = "cluster"
-		replacement  = "syno"
-	}
+  rule {
+    target_label = "cluster"
+    replacement  = "syno"
+  }
 
-	rule {
-		target_label = "namespace"
-		replacement  = "all"
-	}
+  rule {
+    target_label = "namespace"
+    replacement  = "all"
+  }
 }
 
 discovery.relabel "cadvisor" {
@@ -317,6 +317,11 @@ discovery.relabel "cadvisor" {
     action        = "drop"
     regex         = ".(docker|system).*"
   }
+
+  rule {
+    action = "labeldrop"
+    regex  = "cpu"
+  }
 }
 
 discovery.relabel "syno_node" {
@@ -331,12 +336,6 @@ discovery.relabel "syno_node" {
     target_label = "instance"
     replacement  = "192.168.1.28:30091"
   }
-
-  rule {
-    source_labels = ["__name__"]
-    regex         = "go.*"
-    action        = "drop"
-  }
 }
 
 // Metric scrapers
@@ -347,112 +346,112 @@ prometheus.scrape "minio" {
   targets = [{
     __address__ = "192.168.1.28:30900",
   }]
-  forward_to      = [prometheus.remote_write.cloud.receiver]
+  forward_to      = [prometheus.relabel.minio.receiver]
   job_name        = "minio-job"
   metrics_path    = "/minio/v2/metrics/cluster"
   scrape_interval = "60s"
 }
 
 prometheus.scrape "router" {
-	targets = [{
-		__address__ = "192.168.1.1:9100",
-	}]
-	forward_to      = [prometheus.relabel.router.receiver]
-	job_name        = "router"
-	scrape_interval = "30s"
+  targets = [{
+    __address__ = "192.168.1.1:9100",
+  }]
+  forward_to      = [prometheus.relabel.router.receiver]
+  job_name        = "router"
+  scrape_interval = "60s"
 }
 
 prometheus.scrape "syno_node" {
-	targets         = discovery.relabel.syno_node.output
+  targets         = discovery.relabel.syno_node.output
   forward_to      = [prometheus.relabel.syno_node.receiver]
-	job_name        = "syno_node"
-	scrape_interval = "30s"
+  job_name        = "syno_node"
+  scrape_interval = "60s"
 }
 
 prometheus.scrape "prometheus" {
-	targets = [{
-		__address__ = "192.168.1.28:30001",
-	}]
-	forward_to      = [prometheus.relabel.prometheus.receiver]
-	job_name        = "prometheus"
-	scrape_interval = "30s"
+  targets = [{
+    __address__ = "192.168.1.28:30001",
+  }]
+  forward_to      = [prometheus.relabel.prometheus.receiver]
+  job_name        = "prometheus"
+  scrape_interval = "60s"
 }
 
 prometheus.scrape "k8s_node" {
-	targets         = discovery.relabel.k8s_node.output
-	forward_to      = [prometheus.relabel.k8s_node.receiver]
-	job_name        = "k8s_node"
-	scrape_interval = "30s"
+  targets         = discovery.relabel.k8s_node.output
+  forward_to      = [prometheus.relabel.k8s_node.receiver]
+  job_name        = "k8s_node"
+  scrape_interval = "60s"
 }
 
 prometheus.scrape "hass" {
-	targets = [{
-		__address__ = "192.168.1.28:8123",
-	}]
-	forward_to   = [prometheus.relabel.hass.receiver]
-	job_name     = "hass"
-	metrics_path = "/api/prometheus"
+  targets = [{
+    __address__ = "192.168.1.28:8123",
+  }]
+  forward_to   = [prometheus.relabel.hass.receiver]
+  job_name     = "hass"
+  metrics_path = "/api/prometheus"
 
-	authorization {
-		type             = "Bearer"
-		credentials_file = "/var/run/secrets/hass_token_2.txt"
-	}
+  authorization {
+    type             = "Bearer"
+    credentials_file = "/var/run/secrets/hass_token_2.txt"
+  }
 }
 
 prometheus.scrape "snmp" {
-	targets    = discovery.relabel.snmp_alloy.output
-	forward_to = [prometheus.relabel.snmp.receiver]
-	scrape_interval = "30s"
+  targets    = discovery.relabel.snmp_alloy.output
+  forward_to = [prometheus.relabel.snmp.receiver]
+  scrape_interval = "60s"
 }
 
 prometheus.scrape "http_ping_alloy" {
   targets = discovery.relabel.http_ping_alloy.output
   forward_to = [prometheus.remote_write.cloud.receiver]
-	scrape_interval = "30s"
+  scrape_interval = "60s"
 }
 
 prometheus.scrape "remote_dns_alloy" {
   targets = discovery.relabel.remote_dns_alloy.output
   forward_to = [prometheus.remote_write.cloud.receiver]
-	scrape_interval = "30s"
+  scrape_interval = "60s"
 }
 
 prometheus.scrape "local_dns_alloy" {
   targets = discovery.relabel.local_dns_alloy.output
   forward_to = [prometheus.remote_write.cloud.receiver]
-	scrape_interval = "30s"
+  scrape_interval = "60s"
 }
 
 prometheus.scrape "fail2ban" {
-	targets = [{
-		__address__ = "192.168.1.28:9191",
-	}]
-	forward_to      = [prometheus.remote_write.cloud.receiver]
-	job_name        = "fail2ban"
-	scrape_interval = "30s"
+  targets = [{
+    __address__ = "192.168.1.28:9191",
+  }]
+  forward_to      = [prometheus.remote_write.cloud.receiver]
+  job_name        = "fail2ban"
+  scrape_interval = "60s"
 }
 
 prometheus.scrape "loki" {
-	targets         = discovery.relabel.loki.output
-	forward_to      = [prometheus.remote_write.cloud.receiver]
-	job_name        = "loki"
-	scrape_interval = "30s"
+  targets         = discovery.relabel.loki.output
+  forward_to      = [prometheus.remote_write.cloud.receiver]
+  job_name        = "loki"
+  scrape_interval = "60s"
 }
 
 prometheus.scrape "cadvisor" {
   targets          = discovery.relabel.cadvisor.output
   forward_to       = [prometheus.relabel.cadvisor.receiver]
   job_name         = "cadvisor"
-  scrape_interval  = "30s"
+  scrape_interval  = "60s"
 }
 
 prometheus.scrape "dockerd" {
-	targets = [{
-		__address__ = "192.168.1.28:9323",
-	}]
-	forward_to      = [prometheus.relabel.dockerd.receiver]
-	job_name        = "dockerd"
-	scrape_interval = "30s"
+  targets = [{
+    __address__ = "192.168.1.28:9323",
+  }]
+  forward_to      = [prometheus.relabel.dockerd.receiver]
+  job_name        = "dockerd"
+  scrape_interval = "60s"
 }
 
 prometheus.scrape "mimir" {
@@ -462,189 +461,202 @@ prometheus.scrape "mimir" {
 
   forward_to      = [prometheus.relabel.mimir.receiver]
   job_name        = "mimir"
-  scrape_interval = "30s"
+  scrape_interval = "60s"
 }
 
 // Metric relabelers
 // ========================================
+prometheus.relabel "minio" {
+  forward_to = [prometheus.remote_write.cloud.receiver]
 
-prometheus.relabel "router" {
-	forward_to = [prometheus.remote_write.cloud.receiver]
-
-	rule {
-		source_labels = ["__name__"]
-		regex         = "node_(nfs_requests_total|scrape_collector.*)"
-		action        = "drop"
-	}
-
-	rule {
-		source_labels = ["fstype"]
-		regex         = "(tmpfs|nfs|cifs|vfat)"
-		action        = "drop"
-	}
-
-	rule {
-		source_labels = ["mountpoint"]
-		regex         = ".*pod.*"
-		action        = "drop"
-	}
-
-	rule {
-		source_labels = ["handler"]
-		regex         = "^\\/$|\\/\\-\\/(ready|reload)|\\/(graph|metrics|alerts|favicon.ico)"
-		action        = "drop"
-	}
   rule {
     source_labels = ["__name__"]
-    regex         = "go.*"
+    regex = "minio_s3_requests_ttfb_seconds_distribution"
+    action = "drop"
+  }
+}
+
+prometheus.relabel "router" {
+  forward_to = [prometheus.remote_write.cloud.receiver]
+
+  rule {
+    source_labels = ["__name__"]
+    regex         = "node_(nfs_requests_total|scrape_collector.*)"
+    action        = "drop"
+  }
+
+  rule {
+    source_labels = ["fstype"]
+    regex         = "(tmpfs|nfs|cifs|vfat)"
+    action        = "drop"
+  }
+
+  rule {
+    source_labels = ["mountpoint"]
+    regex         = ".*pod.*"
+    action        = "drop"
+  }
+
+  rule {
+    source_labels = ["handler"]
+    regex         = "^\\/$|\\/\\-\\/(ready|reload)|\\/(graph|metrics|alerts|favicon.ico)"
+    action        = "drop"
+  }
+  rule {
+    source_labels = ["__name__"]
+    regex         = "go.+|scrape.+|node_timex.+|node_cpu_scaling_governor"
     action        = "drop"
   }
 }
 
 prometheus.relabel "syno_node" {
-	forward_to = [prometheus.remote_write.cloud.receiver]
+  forward_to = [prometheus.remote_write.cloud.receiver]
 
-	rule {
-		source_labels = ["__name__"]
-		regex         = "node_(nfs_requests_total|scrape_collector.*)"
-		action        = "drop"
-	}
-
-	rule {
-		source_labels = ["fstype"]
-		regex         = "(tmpfs|nfs|cifs|vfat)"
-		action        = "drop"
-	}
-
-	rule {
-		source_labels = ["mountpoint"]
-		regex         = ".*pod.*"
-		action        = "drop"
-	}
-
-	rule {
-		source_labels = ["handler"]
-		regex         = "^\\/$|\\/\\-\\/(ready|reload)|\\/(graph|metrics|alerts|favicon.ico)"
-		action        = "drop"
-	}
   rule {
     source_labels = ["__name__"]
-    regex         = "go.*"
+    regex         = "go.+|scrape.+|node_(timex.+|cpu_scaling_governor|nfs_requests_total|scrape_collector.+)"
     action        = "drop"
+  }
+
+  rule {
+    source_labels = ["fstype"]
+    regex         = "(tmpfs|nfs|cifs|vfat)"
+    action        = "drop"
+  }
+
+  rule {
+    source_labels = ["mountpoint"]
+    regex         = ".*pod.*"
+    action        = "drop"
+  }
+
+  rule {
+    source_labels = ["handler"]
+    regex         = "^\\/$|\\/\\-\\/(ready|reload)|\\/(graph|metrics|alerts|favicon.ico)"
+    action        = "drop"
+  }
+  rule {
+    source_labels = ["device"]
+    regex = "docker.+"
+    action = "drop"
+  }
+  rule {
+    action = "labeldrop"
+    regex = "cpu|core|mountpoint|fstype|uuid|broadcast|address|duplex"
   }
 }
 
 prometheus.relabel "prometheus" {
-	forward_to = [prometheus.remote_write.cloud.receiver]
+  forward_to = [prometheus.remote_write.cloud.receiver]
 
-	rule {
-		source_labels = ["__name__"]
-		regex         = "node_(nfs_requests_total|scrape_collector.*)"
-		action        = "drop"
-	}
-
-	rule {
-		source_labels = ["fstype"]
-		regex         = "(tmpfs|nfs|cifs|vfat)"
-		action        = "drop"
-	}
-
-	rule {
-		source_labels = ["mountpoint"]
-		regex         = ".*pod.*"
-		action        = "drop"
-	}
-
-	rule {
-		source_labels = ["handler"]
-		regex         = "^\\/$|\\/\\-\\/(ready|reload)|\\/(graph|metrics|alerts|favicon.ico)"
-		action        = "drop"
-	}
   rule {
     source_labels = ["__name__"]
-    regex         = "go.*"
+    regex         = "go.+|scrape.+|node_(timex.+|cpu_scaling_governor|nfs_requests_total|scrape_collector.+)"
+    action        = "drop"
+  }
+
+  rule {
+    source_labels = ["fstype"]
+    regex         = "(tmpfs|nfs|cifs|vfat)"
+    action        = "drop"
+  }
+
+  rule {
+    source_labels = ["mountpoint"]
+    regex         = ".*pod.*"
+    action        = "drop"
+  }
+
+  rule {
+    source_labels = ["handler"]
+    regex         = "^\\/$|\\/\\-\\/(ready|reload)|\\/(graph|metrics|alerts|favicon.ico)"
     action        = "drop"
   }
 }
 
 prometheus.relabel "k8s_node" {
-	forward_to = [prometheus.remote_write.cloud.receiver]
+  forward_to = [prometheus.remote_write.cloud.receiver]
 
-	rule {
-		source_labels = ["__name__"]
-		regex         = "node_(nfs_requests_total|scrape_collector.*)"
-		action        = "drop"
-	}
-
-	rule {
-		source_labels = ["fstype"]
-		regex         = "(tmpfs|nfs|cifs|vfat)"
-		action        = "drop"
-	}
-
-	rule {
-		source_labels = ["mountpoint"]
-		regex         = ".*pod.*"
-		action        = "drop"
-	}
-
-	rule {
-		source_labels = ["handler"]
-		regex         = "^\\/$|\\/\\-\\/(ready|reload)|\\/(graph|metrics|alerts|favicon.ico)"
-		action        = "drop"
-	}
   rule {
     source_labels = ["__name__"]
-    regex         = "go.*"
+    regex         = "go.+|scrape.+|node_(timex.+|cpu_scaling_governor|nfs_requests_total|scrape_collector.+)"
     action        = "drop"
+  }
+
+  rule {
+    source_labels = ["device"]
+    regex         = "lxc.+|cilium.+"
+    action        = "drop"
+  }
+
+  rule {
+    source_labels = ["fstype"]
+    regex         = "(tmpfs|nfs|cifs|vfat)"
+    action        = "drop"
+  }
+
+  rule {
+    source_labels = ["mountpoint"]
+    regex         = ".*pod.*"
+    action        = "drop"
+  }
+
+  rule {
+    source_labels = ["handler"]
+    regex         = "^\\/$|\\/\\-\\/(ready|reload)|\\/(graph|metrics|alerts|favicon.ico)"
+    action        = "drop"
+  }
+  rule {
+    action = "labeldrop"
+    regex  = "cpu|broadcast|address|duplex"
   }
 }
 
 prometheus.relabel "hass" {
-	forward_to = [prometheus.remote_write.cloud.receiver]
+  forward_to = [prometheus.remote_write.cloud.receiver]
 
-	rule {
-		source_labels = ["__name__"]
-		regex         = "hass_(state_change_(total|created)|last_updated_time_seconds|entity_available)"
-		action        = "drop"
-	}
-
-	rule {
-		regex  = "friendly_name"
-		action = "labeldrop"
-	}
   rule {
     source_labels = ["__name__"]
-    regex         = "go.*"
+    regex         = "hass_(state_change_(total|created)|last_updated_time_seconds|entity_available)"
+    action        = "drop"
+  }
+
+  rule {
+    regex  = "friendly_name"
+    action = "labeldrop"
+  }
+  rule {
+    source_labels = ["__name__"]
+    regex         = "go.+|scrape.+"
     action        = "drop"
   }
 }
 
 prometheus.relabel "snmp" {
-	forward_to = [prometheus.remote_write.cloud.receiver]
+  forward_to = [prometheus.remote_write.cloud.receiver]
 
-	rule {
-		source_labels = ["ifName"]
-		regex         = "lxc.*"
-		action        = "drop"
-	}
+  rule {
+    source_labels = ["ifName"]
+    regex         = "lxc.*"
+    action        = "drop"
+  }
 
-	rule {
-		regex  = "ifIndex"
-		action = "labeldrop"
-	}
+  rule {
+    regex  = "ifIndex"
+    action = "labeldrop"
+  }
   rule {
     source_labels = ["__name__"]
-    regex         = "go.*"
+    regex         = "go.+|scrape.+"
     action        = "drop"
   }
 }
 
 prometheus.relabel "cadvisor" {
-	forward_to = [prometheus.remote_write.cloud.receiver]
+  forward_to = [prometheus.remote_write.cloud.receiver]
 
   rule {
-    regex = "image|boot_id|system_uuid|machine_id"
+    regex = "image|boot_id|system_uuid|machine_id|cpu"
     action = "labeldrop"
   }
 
@@ -656,22 +668,22 @@ prometheus.relabel "cadvisor" {
 }
 
 prometheus.relabel "dockerd" {
-	forward_to = [prometheus.remote_write.cloud.receiver]
+  forward_to = [prometheus.remote_write.cloud.receiver]
 
-	rule {
-		source_labels = ["__name__"]
-		regex         = "swarm.*|etcd.*|builder.*"
-		action        = "drop"
-	}
   rule {
     source_labels = ["__name__"]
-    regex         = "go.*"
+    regex         = "swarm.*|etcd.*|builder.*|.+bucket"
+    action        = "drop"
+  }
+  rule {
+    source_labels = ["__name__"]
+    regex         = "go.+|scrape.+|node_timex.+|node_cpu_scaling_governor"
     action        = "drop"
   }
 }
 
 prometheus.relabel "mimir" {
-	forward_to = [prometheus.remote_write.cloud.receiver]
+  forward_to = [prometheus.remote_write.cloud.receiver]
 
   rule {
     source_labels = ["__name__"]
@@ -712,33 +724,33 @@ otelcol.exporter.otlp "default" {
 // ========================================
 
 prometheus.remote_write "default" {
-	external_labels = {
-		prometheus = "prom_main",
-	}
+  external_labels = {
+    prometheus = "prom_main",
+  }
 
-	endpoint {
-		name    = "mimir"
-		url     = "http://192.168.1.28:30909/api/v1/push"
-		headers = {
-			"X-Scope-OrgID" = "default",
-		}
-		send_native_histograms = true
+  endpoint {
+    name    = "mimir"
+    url     = "http://192.168.1.28:30909/api/v1/push"
+    headers = {
+      "X-Scope-OrgID" = "default",
+    }
+    send_native_histograms = true
 
-		queue_config { }
+    queue_config { }
 
-		metadata_config { }
-	}
+    metadata_config { }
+  }
 }
 
 prometheus.remote_write "cloud" {
-	endpoint {
-		url = "https://prometheus-prod-67-prod-us-west-0.grafana.net/api/prom/push"
+  endpoint {
+    url = "https://prometheus-prod-67-prod-us-west-0.grafana.net/api/prom/push"
 
-		basic_auth {
-			username = "3365188"
-			password = sys.env("GCLOUD_RW_API_KEY")
-		}
-	}
+    basic_auth {
+      username = "3365188"
+      password = sys.env("GCLOUD_RW_API_KEY")
+    }
+  }
 }
 
 livedebugging {
