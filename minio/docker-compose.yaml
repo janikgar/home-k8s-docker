@@ -13,7 +13,7 @@ services:
       MINIO_ROOT_USER_FILE: /var/run/secrets/root_user.txt
       MINIO_ROOT_PASSWORD_FILE: /var/run/secrets/root_password.txt
     container_name: minio
-    image: pgsty/minio:RELEASE.2026-03-25T00-00-00Z@sha256:a72bf37c235a83a73890d2a46c5b36801fed61c335175e0396070bf84a8bbb98
+    image: pgsty/minio:RELEASE.2026-06-18T00-00-00Z@sha256:ef6019418b361811d98860aa62ad4cbdf376157e1f6ea6125c11a02b5c45d223
     command: minio server --console-address :9001
     user: "1032:100"
     networks:
