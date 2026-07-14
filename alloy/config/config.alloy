@@ -396,6 +396,7 @@ prometheus.scrape "hass" {
     type             = "Bearer"
     credentials_file = "/var/run/secrets/hass_token_2.txt"
   }
+  scrape_interval = "60s"
 }
 
 prometheus.scrape "snmp" {
@@ -514,7 +515,7 @@ prometheus.relabel "syno_node" {
 
   rule {
     source_labels = ["__name__"]
-    regex         = "go.+|scrape.+|node_(timex.+|cpu_scaling_governor|nfs_requests_total|scrape_collector.+)"
+    regex         = "go.+|scrape.+|node_(timex.+|cpu_scaling_governor|nfs_requests_total|scrape_collector.+|memory_(Mlocked|Inactive|Mapped|Active|KernelStack|Commit|Bounce|Buffers|Dirty|Cached|AnonPages|NFS).+)"
     action        = "drop"
   }
 
@@ -537,7 +538,7 @@ prometheus.relabel "syno_node" {
   }
   rule {
     source_labels = ["device"]
-    regex = "docker.+"
+    regex = "docker.+|lo"
     action = "drop"
   }
   rule {
@@ -579,13 +580,13 @@ prometheus.relabel "k8s_node" {
 
   rule {
     source_labels = ["__name__"]
-    regex         = "go.+|scrape.+|node_(timex.+|cpu_scaling_governor|nfs_requests_total|scrape_collector.+)"
+    regex         = "go.+|scrape.+|node_(timex.+|cpu_scaling_governor|nfs_requests_total|scrape_collector.+|memory_(Mlocked|Inactive|Mapped|Active|KernelStack|Commit|Bounce|Buffers|Dirty|Cached|AnonPages|NFS).+)"
     action        = "drop"
   }
 
   rule {
     source_labels = ["device"]
-    regex         = "lxc.+|cilium.+"
+    regex         = "lxc.+|cilium.+|lo"
     action        = "drop"
   }
 
