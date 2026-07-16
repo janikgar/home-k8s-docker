@@ -662,6 +662,12 @@ prometheus.relabel "cadvisor" {
   }
 
   rule {
+    source_labels = ["__name__"]
+    regex = "container_fs.*"
+    action = "drop"
+  }
+
+  rule {
     source_labels = ["id"]
     regex         = "/(docker|system).*"
     action        = "drop"
