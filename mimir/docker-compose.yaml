@@ -17,7 +17,7 @@ services:
   mimir-1: &mimirConf
     container_name: mimir-1
     hostname: mimir-1
-    image: grafana/mimir:3.1.2@sha256:39cc23910bbaa60d0280fd162265a22c39120ff61b02bc993f3fd3701fb8606d
+    image: grafana/mimir:3.1.3@sha256:c906a6fc334ba401b901230b34f660cb1bb1818ef1b169d90e7e4033b97c4f59
     working_dir: /data/mimir
     command: 
       - -config.file=/etc/mimir.yaml
