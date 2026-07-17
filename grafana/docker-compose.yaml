@@ -28,7 +28,7 @@ services:
       - grafana_db
   grafana_db:
     container_name: grafana_db
-    image: postgres:17.10@sha256:9cbd488d3dcffbaf057f994444c92c07901a6bda67799b6712160e813fcdff23
+    image: postgres:17.10@sha256:a426e44bac0b759c95894d68e1a0ac03ecc20b619f498a91aae373bf06d8508d
     ports:
       - "30020:5432"
     restart: always
