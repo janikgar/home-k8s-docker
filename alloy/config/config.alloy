@@ -349,7 +349,7 @@ prometheus.scrape "minio" {
   forward_to      = [prometheus.relabel.minio.receiver]
   job_name        = "minio-job"
   metrics_path    = "/minio/v2/metrics/cluster"
-  scrape_interval = "60s"
+  scrape_interval = "2m"
 }
 
 prometheus.scrape "router" {
@@ -358,14 +358,14 @@ prometheus.scrape "router" {
   }]
   forward_to      = [prometheus.relabel.router.receiver]
   job_name        = "router"
-  scrape_interval = "60s"
+  scrape_interval = "2m"
 }
 
 prometheus.scrape "syno_node" {
   targets         = discovery.relabel.syno_node.output
   forward_to      = [prometheus.relabel.syno_node.receiver]
   job_name        = "syno_node"
-  scrape_interval = "60s"
+  scrape_interval = "2m"
 }
 
 prometheus.scrape "prometheus" {
@@ -374,14 +374,14 @@ prometheus.scrape "prometheus" {
   }]
   forward_to      = [prometheus.relabel.prometheus.receiver]
   job_name        = "prometheus"
-  scrape_interval = "60s"
+  scrape_interval = "2m"
 }
 
 prometheus.scrape "k8s_node" {
   targets         = discovery.relabel.k8s_node.output
   forward_to      = [prometheus.relabel.k8s_node.receiver]
   job_name        = "k8s_node"
-  scrape_interval = "60s"
+  scrape_interval = "2m"
 }
 
 prometheus.scrape "hass" {
@@ -396,31 +396,31 @@ prometheus.scrape "hass" {
     type             = "Bearer"
     credentials_file = "/var/run/secrets/hass_token_2.txt"
   }
-  scrape_interval = "60s"
+  scrape_interval = "2m"
 }
 
 prometheus.scrape "snmp" {
   targets    = discovery.relabel.snmp_alloy.output
   forward_to = [prometheus.relabel.snmp.receiver]
-  scrape_interval = "60s"
+  scrape_interval = "2m"
 }
 
 prometheus.scrape "http_ping_alloy" {
   targets = discovery.relabel.http_ping_alloy.output
   forward_to = [prometheus.remote_write.cloud.receiver]
-  scrape_interval = "60s"
+  scrape_interval = "2m"
 }
 
 prometheus.scrape "remote_dns_alloy" {
   targets = discovery.relabel.remote_dns_alloy.output
   forward_to = [prometheus.remote_write.cloud.receiver]
-  scrape_interval = "60s"
+  scrape_interval = "2m"
 }
 
 prometheus.scrape "local_dns_alloy" {
   targets = discovery.relabel.local_dns_alloy.output
   forward_to = [prometheus.remote_write.cloud.receiver]
-  scrape_interval = "60s"
+  scrape_interval = "2m"
 }
 
 prometheus.scrape "fail2ban" {
@@ -429,21 +429,21 @@ prometheus.scrape "fail2ban" {
   }]
   forward_to      = [prometheus.remote_write.cloud.receiver]
   job_name        = "fail2ban"
-  scrape_interval = "60s"
+  scrape_interval = "2m"
 }
 
 prometheus.scrape "loki" {
   targets         = discovery.relabel.loki.output
   forward_to      = [prometheus.remote_write.cloud.receiver]
   job_name        = "loki"
-  scrape_interval = "60s"
+  scrape_interval = "2m"
 }
 
 prometheus.scrape "cadvisor" {
   targets          = discovery.relabel.cadvisor.output
   forward_to       = [prometheus.relabel.cadvisor.receiver]
   job_name         = "cadvisor"
-  scrape_interval  = "60s"
+  scrape_interval  = "2m"
 }
 
 prometheus.scrape "dockerd" {
@@ -452,7 +452,7 @@ prometheus.scrape "dockerd" {
   }]
   forward_to      = [prometheus.relabel.dockerd.receiver]
   job_name        = "dockerd"
-  scrape_interval = "60s"
+  scrape_interval = "2m"
 }
 
 prometheus.scrape "mimir" {
@@ -462,7 +462,7 @@ prometheus.scrape "mimir" {
 
   forward_to      = [prometheus.relabel.mimir.receiver]
   job_name        = "mimir"
-  scrape_interval = "60s"
+  scrape_interval = "2m"
 }
 
 // Metric relabelers
