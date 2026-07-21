@@ -65,5 +65,7 @@ prometheus/grafana_old.ini
 fail2ban.sqlite3
 *.env
 
+wealthfolio/data/**
+
 !.gitkeep
 !*custom.conf
