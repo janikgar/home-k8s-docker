@@ -4,27 +4,27 @@ services:
       - '30900:9000'
       - '30901:9001'
     volumes:
-      - ./data:/mnt/data
-      - ./config.txt:/etc/minio/config.env:ro
+      - ./data:/data
+      - ./config.txt:/etc/silo/config.env:ro
       - ./secret_root_user.txt:/var/run/secrets/root_user.txt:ro
       - ./secret_root_password.txt:/var/run/secrets/root_password.txt:ro
     environment:
-      MINIO_CONFIG_ENV_FILE: /etc/minio/config.env
+      MINIO_CONFIG_ENV_FILE: /etc/silo/config.env
       MINIO_ROOT_USER_FILE: /var/run/secrets/root_user.txt
       MINIO_ROOT_PASSWORD_FILE: /var/run/secrets/root_password.txt
-    container_name: minio
-    image: pgsty/minio:RELEASE.2026-06-18T00-00-00Z@sha256:ef6019418b361811d98860aa62ad4cbdf376157e1f6ea6125c11a02b5c45d223
-    command: minio server --console-address :9001
+    container_name: silo
+    image: pgsty/silo:RELEASE.2026-08-06T00-00-00Z@sha256:29a498b24669cae1fed11c1a2fb2b3d73c68829a0a9c0b14e71b386671d38fac
+    command: silo server --console-address :9001
     user: "1032:100"
     networks:
       - minio
     restart: always
     healthcheck:
-      test: ["CMD-SHELL", "curl -s -i localhost:9000/minio/health/live; test $(curl -s -w '%{response_code}\n' localhost:9000/minio/health/live) -eq '200'"]
+      test: ["CMD", "silo healthcheck live"]
       interval: 1m
       timeout: 10s
       retries: 3
       start_period: 2m
     
 networks:
-  minio:
+  silo:
