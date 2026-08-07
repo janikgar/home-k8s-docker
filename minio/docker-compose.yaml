@@ -17,7 +17,7 @@ services:
     command: silo server --console-address :9001
     user: "1032:100"
     networks:
-      - minio
+      - silo
     restart: always
     healthcheck:
       test: ["CMD", "silo healthcheck live"]
