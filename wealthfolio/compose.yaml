@@ -8,7 +8,7 @@ services:
     environment:
       WF_DB_PATH: /data/wealthfolio.db
       WF_LISTEN_ADDR: 0.0.0.0:8088
-      WF_CORS_ALLOW_ORIGINS: http://localhost:8088
+      WF_CORS_ALLOW_ORIGINS: http://localhost:8088,https://wealthfolio.tailc6343.ts.net
     healthcheck:
       test: ["CMD-SHELL", "wget -q -O/dev/null localhost:8088/api/v1/healthz"]
       interval: 1m
