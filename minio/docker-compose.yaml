@@ -13,18 +13,17 @@ services:
       MINIO_ROOT_USER_FILE: /var/run/secrets/root_user.txt
       MINIO_ROOT_PASSWORD_FILE: /var/run/secrets/root_password.txt
     container_name: silo
-    image: pgsty/silo:RELEASE.2026-08-06T00-00-00Z@sha256:29a498b24669cae1fed11c1a2fb2b3d73c68829a0a9c0b14e71b386671d38fac
-    command: silo server --console-address :9001
+    image: pgsty/silo:RELEASE.2026-08-06T00-00-00Z-distroless@sha256:58b5aaa8ab94f82b1ed85c4c351594adbd01c6f0628380f5a85abf1e9216b80a
+    command: server --console-address :9001
     user: "1032:100"
     networks:
       - silo
     restart: always
     healthcheck:
-      test: ["CMD", "silo healthcheck live"]
       interval: 1m
       timeout: 10s
       retries: 3
-      start_period: 2m
+      start_period: 10s
     
 networks:
   silo:
