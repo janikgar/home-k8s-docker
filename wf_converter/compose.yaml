@@ -1,0 +1,12 @@
+# docker pull ghcr.io/janikgar/wealthfolio_converter:latest@sha256:f0f894b594228d8390d647c0ad6cfe29e7ab179856f29a4c7a65cc57082737a1
+
+services:
+  wf_converter:
+    ports:
+      - '8000:8000'
+    container_name: wf_converter
+    image: ghcr.io/janikgar/wealthfolio_converter:v0.0.1@sha256:f0f894b594228d8390d647c0ad6cfe29e7ab179856f29a4c7a65cc57082737a1 
+    env_file: .env
+    environment:
+      STAGE: PRODUCTION
+    restart: always
