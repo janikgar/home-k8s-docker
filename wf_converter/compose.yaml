@@ -1,5 +1,3 @@
-# docker pull ghcr.io/janikgar/wealthfolio_converter:latest@sha256:f0f894b594228d8390d647c0ad6cfe29e7ab179856f29a4c7a65cc57082737a1
-
 services:
   wf_converter:
     ports:
