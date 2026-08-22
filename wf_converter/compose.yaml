@@ -3,7 +3,7 @@ services:
     ports:
       - '8000:8000'
     container_name: wf_converter
-    image: ghcr.io/janikgar/wealthfolio_converter:v0.0.3@sha256:a12509b9034bc878d1b29eed0190c5621d7b4c3d6ee5a82a1a10b2fae27b2612
+    image: ghcr.io/janikgar/wealthfolio_converter:sha-7d05ed0@sha256:4cd35a3c31903da1d4d314f58936f87c8363747996f0e21a323be55f0e93a403
     env_file: .env
     environment:
       STAGE: PRODUCTION
