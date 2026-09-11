@@ -3,7 +3,7 @@ services:
     ports:
       - '8088:8088'
     container_name: wealthfolio
-    image: ghcr.io/wealthfolio/wealthfolio:3.7.0@sha256:1f158231e97f2b8804908091631b5aeedf8d4b4254110e6be997133047a3a600 
+    image: ghcr.io/wealthfolio/wealthfolio:3.8.0@sha256:8477ea3bb4cb37482ba6c97a337fbffb0cb967ad0bddac5bbc79ae33e79026d1 
     env_file: .env
     environment:
       WF_DB_PATH: /data/wealthfolio.db
