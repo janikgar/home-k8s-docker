@@ -1,0 +1,3 @@
+[submodule "chiclette"]
+	path = chiclette
+	url = https://github.com/janikgar/chiclette.git
