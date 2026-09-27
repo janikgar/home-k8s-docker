@@ -2,6 +2,8 @@ services:
   protonmail:
     container_name: protonmail
     image: ghcr.io/dancwilliams/protonmail-bridge-docker:v3.27.0-4@sha256:c4886ae01c092d6c029c321fd6983cf9977b45eadfed767f002c8055a6911e51 
+    networks:
+      - surmai_default
     ports:
       - 8143:143/tcp
       - 2525:25/tcp
