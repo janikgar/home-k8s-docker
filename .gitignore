@@ -1,8 +1,6 @@
 archived_containers
 @eaDir
 
-diun/data/diun.db
-
 fail2ban/config/log
 fail2ban/config/fail2ban/**
 
@@ -28,39 +26,10 @@ hass/eufy
 immich/library/
 immich/postgres/
 
-loki/loki/**
-
-!tempo/tempo-data/.gitkeep
-tempo/tempo-data/**
-
-!mimir/data/.gitkeep
-mimir/data/**
-mimir/email_token.txt
-mimir/discord_webhook.txt
-
 minio/data/**
 minio/secret*
 
-ntfy/cache
-
-grafana/grafana_data/**
-grafana/pg_data/**
-
-prometheus/archive
-prometheus/grafana_data/**
-prometheus/prometheus_data/**
-prometheus/tempo-data/**
-prometheus/images/**
-
-prometheus/config.my-cnf
-prometheus/generator.yaml
-prometheus/hass_token.txt
-prometheus/hass_token_2.txt
-prometheus/minio_token.txt
-prometheus/email_token.txt
-prometheus/discord_webhook.txt
-
-prometheus/grafana_old.ini
+surmai/surmai_data/**
 
 fail2ban.sqlite3
 *.env
