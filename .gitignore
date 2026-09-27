@@ -29,6 +29,8 @@ immich/postgres/
 minio/data/**
 minio/secret*
 
+protonmail/protonmail_data/**
+
 surmai/surmai_data/**
 
 fail2ban.sqlite3

@@ -1,0 +1,12 @@
+services:
+  protonmail:
+    container_name: protonmail
+    image: shenxn/protonmail-bridge:3.19.0-build@sha256:2ab51a06299b9bb638d6cdd056553409d78c20ca8d07b7d35bbccec3ad3a0c62
+    ports:
+      - 8143:143/tcp
+      - 2525:25/tcp
+    restart: always
+    environment:
+      TZ: America/Los_Angeles
+    volumes:
+      - ./protonmail:/root
