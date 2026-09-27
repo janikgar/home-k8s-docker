@@ -12,3 +12,7 @@ services:
       TZ: America/Los_Angeles
     volumes:
       - ./protonmail_data:/root
+
+networks:
+  surmai_default:
+    external: true
