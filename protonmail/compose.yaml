@@ -9,4 +9,4 @@ services:
     environment:
       TZ: America/Los_Angeles
     volumes:
-      - ./protonmail:/root
+      - ./protonmail_data:/root
