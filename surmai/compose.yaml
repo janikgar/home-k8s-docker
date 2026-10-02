@@ -7,7 +7,7 @@ services:
     # latest images point to released versions
     # For the yet unreleased updates, use the main tag i.e.
     # image: ghcr.io/rohitkumbhar/surmai:main
-    image: ghcr.io/rohitkumbhar/surmai:v0.5.5@sha256:d9e7f3158cd03d9f6e3bcef5b3589a3708227f61895bc7e1fc5fb8e4f166873e
+    image: ghcr.io/rohitkumbhar/surmai:v0.5.6@sha256:176639fc91829370c469dae78038811f8672663424500b21fd6bcb2a66659359
     volumes:
       - ./surmai_data:/pb_data
     ports:
