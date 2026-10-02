@@ -8,8 +8,13 @@ services:
     # For the yet unreleased updates, use the main tag i.e.
     # image: ghcr.io/rohitkumbhar/surmai:main
     image: ghcr.io/rohitkumbhar/surmai:v0.5.6@sha256:176639fc91829370c469dae78038811f8672663424500b21fd6bcb2a66659359
+    command:
+      - sh
+      - -c
+      - "cat /cert.pem >> /etc/ssl/cert.pem; exec /pb/litestream-init.sh"
     volumes:
       - ./surmai_data:/pb_data
+      - ./cert.pem:/cert.pem:ro
     ports:
       - "9090:8080"
     restart: always
