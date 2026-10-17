@@ -18,13 +18,6 @@ usb:
 webhook:
 zeroconf:
 
-prometheus:
-  namespace: hass
-
-# Text to speech
-tts:
-  - platform: google_translate
-
 group: !include groups.yaml
 automation: !include automations.yaml
 script: !include scripts.yaml
@@ -52,7 +45,6 @@ sensor:
 logger:
     default: info
     logs: {}
-#        homeassistant.components.webhook: debug
 
 sonos:
   media_player:
