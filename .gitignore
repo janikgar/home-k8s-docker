@@ -38,5 +38,7 @@ fail2ban.sqlite3
 
 wealthfolio/data/**
 
+piper/data/**
+
 !.gitkeep
 !*custom.conf

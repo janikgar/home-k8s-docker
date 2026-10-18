@@ -1,6 +1,7 @@
 #default_config:
 
 api:
+assist_pipeline:
 backup:
 config:
 dhcp:

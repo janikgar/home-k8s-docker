@@ -1,0 +1,29 @@
+# docker run -it -p 10200:10200 -p 5000:5000 -v ./data:/data rhasspy/wyoming-piper --voice en_US-lessac-medium --web-server --web-server-host 0.0.0.0
+
+services:
+  piper:
+    container_name: piper
+    ports:
+      - 10200:10200
+      - 5000:5000
+    volumes:
+      - ./data:/data
+    image: rhasspy/wyoming-piper
+    command:
+      - --voice
+      - en_US-lessac-medium
+      - --web-server
+      - --web-server-host
+      - 0.0.0.0
+  whisper:
+    container_name: whisper
+    ports:
+      - 10300:10300
+    image: rhasspy/wyoming-whisper
+    volumes:
+      - ./data:/data
+    env_file: .env
+    environment:
+      WYO_WHISPER_MODEL: tiny-int8
+      WYO_WHISPER_LANGUAGE: en
+      WYO_WHISPER_HASS_API: http://192.168.1.28:8123/api
