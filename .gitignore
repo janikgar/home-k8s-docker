@@ -36,15 +36,15 @@ surmai/surmai_data/**
 fail2ban.sqlite3
 **/*.env
 
-litellm/.env.email
+litellm/.env.*
 litellm/cert.pem
 litellm/data/**
+litellm/searxng-config/**
 
 wealthfolio/data/**
 
 piper/data/**
 
-litellm/searxng-config/**
 
 !.gitkeep
 !*custom.conf

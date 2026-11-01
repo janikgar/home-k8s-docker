@@ -62,6 +62,8 @@ services:
   openwebui:
     container_name: open-webui
     image: ghcr.io/open-webui/open-webui:v0.12.5@sha256:03443b8de6b617da9d900edd09b4bf1cb0ddbfdcba6afb42c548336a0b821ded
+    env_file:
+      - .env.openwebui
     environment:
       OLLAMA_BASE_URL: http://192.168.1.241:11434
     ports:
