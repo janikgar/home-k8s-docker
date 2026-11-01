@@ -1,3 +1,9 @@
 [submodule "chiclette"]
 	path = chiclette
 	url = git@github.com:janikgar/chiclette.git
+[submodule "costco-mcp/costco-mcp"]
+	path = costco-mcp/costco-mcp
+	url = https://github.com/thehesiod/costco-mcp
+[submodule "costco-mcp/mcp-wrapper-http"]
+	path = costco-mcp/mcp-wrapper-http
+	url = https://github.com/DougBourban/mcp-wrapper-http

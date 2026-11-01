@@ -1,0 +1,92 @@
+services:
+  litellm:
+    image: ghcr.io/berriai/litellm:v1.106.2@sha256:d1da6edc025e6a59be6faa50b4e8e42c115e1c99644aa3fc2ac416dd353f41da
+    volumes:
+      - ./config.yaml:/app/config.yaml
+    command:
+      - "--config=/app/config.yaml"
+    ports:
+      - "4000:4000" # Map the container port to the host, change the host port if necessary
+    environment:
+      DATABASE_URL: "postgresql://llmproxy:dbpassword9090@192.168.1.28:5433/litellm"
+      STORE_MODEL_IN_DB: "True" # allows adding models to proxy via UI
+      LITELLM_ENABLE_MCP_STDIO: "true"
+    env_file:
+      - .env # Load local .env file
+    depends_on:
+      - db  # Indicates that this service depends on the 'db' service, ensuring 'db' starts first
+#    healthcheck:  # Defines the health check configuration for the container
+#      test:
+#        - CMD-SHELL
+#        - python3 -c "import urllib.request; urllib.request.urlopen('http://localhost:4000/health/liveliness')"  # Command to execute for health check
+#      interval: 30s  # Perform health check every 30 seconds
+#      timeout: 10s   # Health check command times out after 10 seconds
+#      retries: 3     # Retry up to 3 times if health check fails
+#      start_period: 40s  # Wait 40 seconds after container start before beginning health checks
+
+  db:
+    image: postgres:16@sha256:9e2cf6287f25c3151f4c9421ccce2b17f3e60061c111a29165e0d2cdd9ff0a97
+    restart: always
+    container_name: litellm_db
+    environment:
+      POSTGRES_DB: litellm
+      POSTGRES_USER: llmproxy
+      POSTGRES_PASSWORD: dbpassword9090
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data # Persists Postgres data across container restarts
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d litellm -U llmproxy"]
+      interval: 1s
+      timeout: 5s
+      retries: 10
+  redis:
+    image: valkey/valkey:9.2-alpine
+    ports:
+      - 16379:6379
+  email:
+    image: ghcr.io/n24q02m/better-email-mcp:1.41.5@sha256:c96c794919fc02c761ad20afee08a81174019053191a791dbaaf184c90a1d09b
+    env_file: .env.email
+    environment:
+      - TRANSPORT_MODE=http
+      - MCP_STORAGE_BACKEND=local
+      - HOME=/data
+      - NODE_TLS_REJECT_UNAUTHORIZED=0
+    # Published on host loopback only: reach it as http://localhost:8082, or put
+    # your own TLS reverse proxy on the same host in front of it.
+    ports:
+      - "8082:8080"
+    volumes:
+      - email-data:/data
+  openwebui:
+    container_name: open-webui
+    image: ghcr.io/open-webui/open-webui:v0.12.5@sha256:03443b8de6b617da9d900edd09b4bf1cb0ddbfdcba6afb42c548336a0b821ded
+    environment:
+      OLLAMA_BASE_URL: http://192.168.1.241:11434
+    ports:
+      - 3000:8080
+    volumes:
+      - open-webui:/app/backend/data
+    healthcheck:
+      test: ["CMD-SHELL", "exit 0"]
+      interval: 1s
+      timeout: 5s
+      retries: 10
+  searxng:
+    container_name: searxng-core
+    image: docker.io/searxng/searxng:2026.10.29-c15647b5a@sha256:c4e8448495ef3b0175eb6c97a19c1ac7cc0a5c907d581ab3877f3cb430e81b86 
+    ports:
+      - 8001:8001
+    environment:
+      SEARXNG_PORT: 8001
+    volumes:
+      - ./searxng-config/:/etc/searxng/:Z
+      - searxng-data:/var/cache/searxng/
+
+volumes:
+  email-data:
+  open-webui:
+  searxng-data:
+  postgres_data:
+    name: litellm_postgres_data # Named volume for Postgres data persistence

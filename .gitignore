@@ -34,11 +34,17 @@ protonmail/protonmail_data/**
 surmai/surmai_data/**
 
 fail2ban.sqlite3
-*.env
+**/*.env
+
+litellm/.env.email
+litellm/cert.pem
+litellm/data/**
 
 wealthfolio/data/**
 
 piper/data/**
+
+litellm/searxng-config/**
 
 !.gitkeep
 !*custom.conf

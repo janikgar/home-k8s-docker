@@ -1,0 +1,8 @@
+general_settings:
+  master_key: os.environ/LITELLM_MASTER_KEY
+  disable_env_credential_login: true
+  enable_mcp_registry: true
+litellm_settings:
+  cache: true
+mcp_settings:
+  auto_register_tools: true
