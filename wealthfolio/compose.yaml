@@ -3,7 +3,7 @@ services:
     ports:
       - '8088:8088'
     container_name: wealthfolio
-    image: ghcr.io/wealthfolio/wealthfolio:3.11.0@sha256:2ac97bdb74f1d472f4781d1f95fdbdcd0cf612138cb80a2421282cf1788c5217
+    image: ghcr.io/wealthfolio/wealthfolio:3.12.0@sha256:10420266494ee29e7d68585599d1de08cc070ddb1adbacf066426af3e0721dba
     env_file: .env
     dns:
       - 100.100.100.100
