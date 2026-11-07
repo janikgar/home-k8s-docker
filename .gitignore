@@ -41,6 +41,8 @@ litellm/cert.pem
 litellm/data/**
 litellm/searxng-config/**
 
+open-webui/open-webui/**
+
 wealthfolio/data/**
 
 piper/data/**

@@ -13,7 +13,6 @@ WORKDIR /app
 RUN apt-get install gcc
 
 COPY costco-mcp/uv.lock costco-mcp/pyproject.toml costco-mcp/README.md .python-version /app/
-
 RUN --mount=type=cache,target=/root/.cache/uv \
     uv python install
 
@@ -24,6 +23,10 @@ RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync
 
 COPY costco-mcp .python-version /app
+
+COPY mcp-wrapper-http/http_wrapper.py /app/src/mcp-wrapper-http/
+
+RUN touch /app/src/mcp-wrapper-http/__init__.py
 
 FROM dev AS final
 
@@ -37,8 +40,6 @@ RUN --mount=type=cache,target=/root/.cache/uv \
     --mount=from=ghcr.io/astral-sh/uv,source=/uv,target=/bin/uv \
     uv python install
 
-COPY mcp-wrapper-http/http_wrapper.py /app/mcp-wrapper-http/
-
 ENV PATH="/app/.venv/bin:$PATH"
 
-CMD ["python3", "mcp-wrapper-http/http_wrapper.py", "--host", "0.0.0.0", "python3", "src/costco_mcp_server/server.py", "--save-token", "personal", "${REFRESH_TOKEN}"]
+CMD ["python3", "src/mcp-wrapper-http/http_wrapper.py", "--host", "0.0.0.0", "costco-mcp-server", "--save-token", "personal", "${REFRESH_TOKEN}"]

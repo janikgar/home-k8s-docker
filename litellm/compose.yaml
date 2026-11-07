@@ -5,6 +5,8 @@ services:
       - ./config.yaml:/app/config.yaml
     command:
       - "--config=/app/config.yaml"
+    dns:
+      - 100.100.100.100
     ports:
       - "4000:4000" # Map the container port to the host, change the host port if necessary
     environment:
@@ -59,22 +61,6 @@ services:
       - "8082:8080"
     volumes:
       - email-data:/data
-  openwebui:
-    container_name: open-webui
-    image: ghcr.io/open-webui/open-webui:v0.12.5@sha256:03443b8de6b617da9d900edd09b4bf1cb0ddbfdcba6afb42c548336a0b821ded
-    env_file:
-      - .env.openwebui
-    environment:
-      OLLAMA_BASE_URL: http://192.168.1.241:11434
-    ports:
-      - 3000:8080
-    volumes:
-      - open-webui:/app/backend/data
-    healthcheck:
-      test: ["CMD-SHELL", "exit 0"]
-      interval: 1s
-      timeout: 5s
-      retries: 10
   searxng:
     container_name: searxng-core
     image: docker.io/searxng/searxng:2026.10.29-c15647b5a@sha256:c4e8448495ef3b0175eb6c97a19c1ac7cc0a5c907d581ab3877f3cb430e81b86 
@@ -88,7 +74,6 @@ services:
 
 volumes:
   email-data:
-  open-webui:
   searxng-data:
   postgres_data:
     name: litellm_postgres_data # Named volume for Postgres data persistence

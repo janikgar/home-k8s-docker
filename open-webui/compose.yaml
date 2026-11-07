@@ -1,0 +1,29 @@
+services:
+  openweb-ui:
+    container_name: open-webui
+    image: ghcr.io/open-webui/open-webui:v0.12.5@sha256:03443b8de6b617da9d900edd09b4bf1cb0ddbfdcba6afb42c548336a0b821ded
+    dns:
+      - 100.100.100.100
+    env_file:
+      - .env
+    environment:
+      OLLAMA_BASE_URL: http://192.168.1.241:11434
+      ENABLE_OAUTH_SIGNUP: true
+      OAUTH_ROLES_CLAIM: groups
+      OAUTH_ADMIN_ROLES: administrators
+      OAUTH_ALLOWED_ROLES: '*'
+      OAUTH_PROVIDER_NAME: Synology
+      OPENID_PROVIDER_URL: https://syno.tailc6343.ts.net/webman/sso/.well-known/openid-configuration
+      ENABLE_SIGNUP: false
+      OPENAI_API_BASE_URL: https://litellm.tailc6343.ts.net/v1
+      ENABLE_OLLAMA_API: false
+    ports:
+      - 3000:8080
+    volumes:
+      - ./open-webui:/app/backend/data
+    healthcheck:
+      test: ["CMD-SHELL", "exit 0"]
+      interval: 1s
+      timeout: 5s
+      retries: 10
+
