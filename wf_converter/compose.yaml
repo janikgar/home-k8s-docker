@@ -7,4 +7,3 @@ services:
     env_file: .env
     environment:
       STAGE: PRODUCTION
-    restart: always
