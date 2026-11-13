@@ -1,6 +1,6 @@
 services:
   litellm:
-    image: ghcr.io/berriai/litellm:v1.108.2@sha256:4977c08232168397e48eb3e8c2da0dd9e8d53f9fa14ab1e61130aa06b0ad45d8
+    image: ghcr.io/berriai/litellm:v1.109.1@sha256:192404922cf3ede22cfef2692a0f0e9915413c2d72e623b5d3cf0eabb0bc5eb9
     volumes:
       - ./config.yaml:/app/config.yaml
     command:
