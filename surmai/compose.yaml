@@ -7,7 +7,7 @@ services:
     # latest images point to released versions
     # For the yet unreleased updates, use the main tag i.e.
     # image: ghcr.io/rohitkumbhar/surmai:main
-    image: ghcr.io/rohitkumbhar/surmai:v0.5.6@sha256:176639fc91829370c469dae78038811f8672663424500b21fd6bcb2a66659359
+    image: ghcr.io/rohitkumbhar/surmai:v0.6.2@sha256:ff0306c6136978ca3e29b91ddc5d90440d2ede98217dd574d8e1805ba59bf151
     command:
       - sh
       - -c
