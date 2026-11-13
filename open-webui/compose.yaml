@@ -7,6 +7,7 @@ services:
     env_file:
       - .env
     environment:
+      ENABLE_PERSISTENT_CONFIG : false
       OLLAMA_BASE_URL: http://192.168.1.241:11434
       ENABLE_OAUTH_SIGNUP: true
       OAUTH_ROLES_CLAIM: groups
@@ -17,6 +18,13 @@ services:
       ENABLE_SIGNUP: false
       OPENAI_API_BASE_URL: https://litellm.tailc6343.ts.net/v1
       ENABLE_OLLAMA_API: false
+      ENABLE_WEB_SEARCH: true
+      WEB_SEARCH_ENGINE: searxng
+      SEARXNG_QUERY_URL: http://192.168.1.28:8001
+      DEFAULT_MODELS: lite
+      MODEL_ORDER_LIST: '["lite","medium","code-lite","code-medium"]'
+      DEFAULT_INTERFACE_SETTINGS: '{"textScale":"1.15"}'
+      DEFAULT_MODEL_METADATA: '{"capabilities":{"web_search":true,"vision":true,"file_upload":true,"file_context":false,"image_generation":false,"code_interpreter":true,"terminal":true,"usage":true,"citations":true,"status_updates":true,"memory":true,"builtin_tools":true}}'
     ports:
       - 3000:8080
     volumes:

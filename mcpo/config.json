@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "costco": {
+      "command": "uvx",
+      "args": ["--exclude-newer-package", "mcp=2026-06-28", "costco-mcp-server"]
+    }
+  }
+}

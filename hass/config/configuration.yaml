@@ -30,18 +30,17 @@ device_tracker:
     host: 192.168.1.1
     password: !secret syno_srm_password
 
-sensor:
-  - platform: wsdot
-    api_key: !secret wsdot_api_key
-    travel_time:
-      - id: 41
-        name: Downtown Bellevue to Renton
-      - id: 42
-        name: Downtown Bellevue to Renton (HOV)
-      - id: 101
-        name: Renton to Downtown Bellevue
-      - id: 100
-        name: Renton to Downtown Bellevue (HOV)
+wsdot:
+  api_key: !secret wsdot_api_key
+  travel_time:
+    - id: 41
+      name: Downtown Bellevue to Renton
+    - id: 42
+      name: Downtown Bellevue to Renton (HOV)
+    - id: 101
+      name: Renton to Downtown Bellevue
+    - id: 100
+      name: Renton to Downtown Bellevue (HOV)
 
 logger:
     default: info

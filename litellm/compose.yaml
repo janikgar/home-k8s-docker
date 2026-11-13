@@ -11,20 +11,19 @@ services:
       - "4000:4000" # Map the container port to the host, change the host port if necessary
     environment:
       DATABASE_URL: "postgresql://llmproxy:dbpassword9090@192.168.1.28:5433/litellm"
-      STORE_MODEL_IN_DB: "True" # allows adding models to proxy via UI
-      LITELLM_ENABLE_MCP_STDIO: "true"
+      PROXY_BASE_URL: https://litellm.tailc6343.ts.net
     env_file:
       - .env # Load local .env file
     depends_on:
       - db  # Indicates that this service depends on the 'db' service, ensuring 'db' starts first
-#    healthcheck:  # Defines the health check configuration for the container
-#      test:
-#        - CMD-SHELL
-#        - python3 -c "import urllib.request; urllib.request.urlopen('http://localhost:4000/health/liveliness')"  # Command to execute for health check
-#      interval: 30s  # Perform health check every 30 seconds
-#      timeout: 10s   # Health check command times out after 10 seconds
-#      retries: 3     # Retry up to 3 times if health check fails
-#      start_period: 40s  # Wait 40 seconds after container start before beginning health checks
+    healthcheck:  # Defines the health check configuration for the container
+      test:
+        - CMD-SHELL
+        - python3 -c "import urllib.request; urllib.request.urlopen('http://localhost:4000/health/liveliness')"  # Command to execute for health check
+      interval: 30s  # Perform health check every 30 seconds
+      timeout: 10s   # Health check command times out after 10 seconds
+      retries: 6     # Retry up to 3 times if health check fails
+      start_period: 1m  # Wait 40 seconds after container start before beginning health checks
 
   db:
     image: postgres:16.15@sha256:f9a7b9ebf6f56201f949db745e47bc423c0f0f8294bafe991cc10bf74b029657

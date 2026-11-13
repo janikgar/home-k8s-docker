@@ -4,5 +4,89 @@ general_settings:
   enable_mcp_registry: true
 litellm_settings:
   cache: true
+  user_url_allowed_hosts:
+    - 192.168.1.28
 mcp_settings:
   auto_register_tools: true
+model_list:
+  - model_name: lite
+    litellm_params:
+       model: gemma4:e2b
+       created_by: Admin
+       created_at: "2026-11-08T00:00:00Z"
+       api_base: http://192.168.1.242:11434
+       custom_llm_provider: ollama_chat
+       input_cost_per_token: 4e-8
+       output_cost_per_token: 8e-8
+       cache_read_input_token_cost: 2e-8
+       cache_creation_input_token_cost: 4e-8
+  - model_name: medium
+    litellm_params:
+       model: gemma4:12b
+       created_by: Admin
+       created_at: "2026-11-08T00:00:00Z"
+       api_base: http://192.168.1.242:11434
+       custom_llm_provider: ollama_chat
+       input_cost_per_token: 5e-8
+       output_cost_per_token: 2.5e-7
+       cache_read_input_token_cost: 1.25e-8
+       cache_creation_input_token_cost: 1.25e-7
+  - model_name: code-lite
+    litellm_params:
+       model: qwen3.5:4b
+       created_by: Admin
+       created_at: "2026-11-08T00:00:00Z"
+       api_base: http://192.168.1.242:11434
+       custom_llm_provider: ollama_chat
+       input_cost_per_token: 5e-8
+       output_cost_per_token: 2e-7
+       cache_read_input_token_cost: 2.5e-8
+       cache_creation_input_token_cost: 1e-7
+  - model_name: code-medium
+    litellm_params:
+       model: qwen3.5:9b
+       created_by: Admin
+       created_at: "2026-11-08T00:00:00Z"
+       api_base: http://192.168.1.242:11434
+       custom_llm_provider: ollama_chat
+       input_cost_per_token: 1e-7
+       output_cost_per_token: 4e-7
+       cache_read_input_token_cost: 5e-8
+       cache_creation_input_token_cost: 2e-7
+mcp_servers:
+  email:
+    url: http://192.168.1.28:8082/mcp
+    transport: http
+    auth_type: none
+    allow_all_keys: true
+  costco:
+    url: http://192.168.1.28:8002/costco
+    spec_path: http://192.168.1.28:8002/costco/openapi.json
+    auth_type: none
+    allow_all_keys: true
+    mcp_info:
+      logo_url: https://www.costco.com/nextGBrowseAssets/favicon.ico
+  grafana:
+    url: https://mcp.grafana.com/mcp
+    transport: http
+    auth_type: oauth_delegate
+    allow_all_keys: true
+    mcp_info:
+      logo_url: https://grafana-assets.grafana.net/grafana/13.4.0-41805046240/public/build/static/img/grafana_icon.8da070fb.svg
+  wealthfolio:
+    url: https://wealthfolio.tailc6343.ts.net/mcp
+    alias: wf
+    transport: http
+    auth_type: bearer_token
+    auth_value: os.environ/WF_TOKEN
+    allow_all_keys: true
+    mcp_info:
+      logo_url: https://home.tailc6343.ts.net/assets/wealthfolio.png
+  home_assistant:
+    url: https://home-assistant.tailc6343.ts.net/mcp
+    transport: http
+    auth_type: oauth2
+    oauth2_flow: authorization_code
+    allow_all_keys: true
+    mcp_info:
+      logo_url: https://home.tailc6343.ts.net/assets/home-assistant.png

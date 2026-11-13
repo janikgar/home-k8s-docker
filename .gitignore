@@ -47,6 +47,7 @@ wealthfolio/data/**
 
 piper/data/**
 
+mcpo/data/**
 
 !.gitkeep
 !*custom.conf

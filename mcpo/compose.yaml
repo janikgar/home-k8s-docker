@@ -1,0 +1,13 @@
+services:
+  mcpo:
+    container_name: mcpo
+    ports:
+      - 8002:8000
+    image: ghcr.io/open-webui/mcpo:main@sha256:1e82c9555c19e50b80745705f32b47a2647589f35279527b5118ecd3a71bd467
+    volumes:
+      - ./config.json:/opt/config.json:ro
+      - ./data:/root
+    command:
+      - "--config"
+      - /opt/config.json
+      - "--hot-reload"
