@@ -26,7 +26,7 @@ services:
       start_period: 1m  # Wait 40 seconds after container start before beginning health checks
 
   db:
-    image: postgres:16.16@sha256:3950ad7c3148ca2175ef1b6c36c9efbf78957ae8fbe8b3a5d7c35af50500382f
+    image: postgres:19.0@sha256:4ea94de574c17f0372722806c949757050fbb1cd7648410fe45d6bba275cc00e
     restart: always
     container_name: litellm_db
     environment:
