@@ -3,7 +3,7 @@ services:
     container_name: mcpo
     ports:
       - 8002:8000
-    image: ghcr.io/open-webui/mcpo:main@sha256:1e82c9555c19e50b80745705f32b47a2647589f35279527b5118ecd3a71bd467
+    image: ghcr.io/open-webui/mcpo:main@sha256:569ea417d1f15cfd9e18455f4df236f2e77f6d7280fecfc0044900f91f26adbb
     volumes:
       - ./config.json:/opt/config.json:ro
       - ./data:/root
