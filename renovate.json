@@ -15,7 +15,7 @@
   ],
   "packageRules": [
     {
-      "matchDatasources": ["docker"],
+      "matchDatasources": ["docker", ""],
       "matchPackageNames": ["postgres"],
       "versioning": "semver-coerced"
     }
